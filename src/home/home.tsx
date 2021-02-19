@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 import Navbar from "../Components/Navbar";
 
 const Home: React.FC = () => {

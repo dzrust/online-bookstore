@@ -1,13 +1,14 @@
 const path = require("path");
 
 module.exports = {
+  mode: "production",
   entry: "./src/bootstrapper.tsx",
   module: {
     rules: [
       {
         test: /\.tsx?$/,
         use: "ts-loader",
-        exclude: /node_modules/,
+        exclude: /node_modules/
       },
       {
         test: /\.css$/i,
@@ -20,6 +21,6 @@ module.exports = {
   },
   output: {
     filename: "index.js",
-    path: path.resolve(__dirname, "..", "dist"),
+    path: path.resolve(__dirname, "dist"),
   },
 };

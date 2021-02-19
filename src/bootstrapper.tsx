@@ -1,6 +1,6 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import Home from "./Home/Home";
+import * as React from "react";
+import * as ReactDOM from "react-dom";
+import Home from "./home/home";
 
 const bootstrapApp = (location: string) => {
     switch(location) {
