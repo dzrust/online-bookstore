@@ -1,0 +1,39 @@
+{
+  "name": "online-bookstore",
+  "version": "1.0.0",
+  "description": "Online bookstore example application",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dzrust/online-bookstore.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dzrust/online-bookstore/issues"
+  },
+  "homepage": "https://github.com/dzrust/online-bookstore#readme",
+  "dependencies": {
+    "mysql": "^2.18.1",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.1.3"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.11",
+    "@types/mysql": "^2.15.17",
+    "@types/node": "^14.14.22",
+    "@types/react": "^17.0.0",
+    "@types/react-dom": "^17.0.0",
+    "css-loader": "^5.0.2",
+    "express": "^4.17.1",
+    "style-loader": "^2.0.0",
+    "ts-loader": "^8.0.14",
+    "webpack": "^5.18.0",
+    "webpack-cli": "^4.4.0"
+  }
+}
