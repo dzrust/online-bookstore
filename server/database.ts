@@ -10,10 +10,10 @@ class Database {
 
     public openDatabse = () => {
         this.dbConnection = mysql.createConnection({
-            host: 'localhost',
-            user: 'me',
-            password: 'secret',
-            database: 'my_db'
+            host: "localhost",
+            user: "me",
+            password: "secret",
+            database: "my_db"
         });
         this.dbConnection.connect();
     }

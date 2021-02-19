@@ -15,7 +15,7 @@ mappings.mappings.forEach(mapping => {
 
 app.use(express.json());
 
-app.get('/scripts/index.js',
+app.get("/scripts/index.js",
     (req: express.Request, res: express.Response) => res.sendFile(path.join(__dirname, "..", "dist/index.js"))
 );
 
