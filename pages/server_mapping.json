@@ -1,0 +1,8 @@
+{
+    "mappings": [
+        {
+            "path": "/",
+            "file": "index.html"
+        }
+    ]
+}
