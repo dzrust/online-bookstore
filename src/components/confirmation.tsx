@@ -7,7 +7,7 @@ type ConfirmationProps = {
 
 const Confirmation: React.FC<ConfirmationProps> = ({onYes, onNo}) => {
     return (
-        <div>
+        <div className="confirmation modal">
             <div>
                 Are you sure you wish to continue?
             </div>

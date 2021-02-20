@@ -3,6 +3,7 @@ import { Book } from "../../models/book";
 import BookForm from "../book/form";
 import BookList from "../book/list";
 import BookPreview from "../book/preview";
+import ErrorDisplay from "../components/error";
 import "../styles.css";
 
 enum VIEWS {
@@ -15,6 +16,7 @@ const Home: React.FC = () => {
     const [modalOpen, setModalOpen] = React.useState<VIEWS | null>(null);
     const [selectedBook, setSelectedBook] = React.useState<Book | null>(null);
     const [books, setBooks] = React.useState<Book[]>([]);
+    const [error, setError] = React.useState<string | null>(null);
     const selectBook = (book: Book) => {
         setModalOpen(VIEWS.PREVIEW);
         setSelectedBook(book);
@@ -28,8 +30,8 @@ const Home: React.FC = () => {
     }
     const renderModal = () => {
         switch (modalOpen) {
-            case VIEWS.PREVIEW: return selectedBook && <BookPreview book={selectedBook} onClose={closeModal} onEdit={() => setModalOpen(VIEWS.FORM)} />;
-            case VIEWS.FORM: return <BookForm onClose={closeModal} book={selectedBook ?? undefined} />;
+            case VIEWS.PREVIEW: return selectedBook && <BookPreview book={selectedBook} onClose={closeModal} onEdit={() => setModalOpen(VIEWS.FORM)} setSelectedBook={setSelectedBook} setError={setError} />;
+            case VIEWS.FORM: return <BookForm onClose={closeModal} book={selectedBook ?? undefined} setError={setError} />;
             default: return null;
         }
     }
@@ -44,11 +46,14 @@ const Home: React.FC = () => {
                     </div>
                 </div>
                 <div className="home-content">
-                    <BookList onBookSelected={selectBook} books={books} setBooks={setBooks} />
+                    <BookList onBookSelected={selectBook} books={books} setBooks={setBooks} setError={setError} />
                 </div>
             </div>
             {
                 renderModal()
+            }
+            {
+                error && <ErrorDisplay message={error}/>
             }
         </div>
     )

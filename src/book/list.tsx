@@ -6,13 +6,13 @@ type BookListProps = {
     books: Book[];
     setBooks: (books: Book[]) => void;
     onBookSelected: (book: Book) => void;
+    setError: (error: string | null) => void;
 }
 
 let timeout: any | null = null;
 
-const BookList: React.FC<BookListProps> = ({ books, setBooks, onBookSelected }) => {
+const BookList: React.FC<BookListProps> = ({ books, setBooks, onBookSelected, setError }) => {
     const [searchText, setSearchText] = React.useState("");
-    const [error, setError] = React.useState<string | null>(null);
     const updateSearchText = (searchText: string) => {
         setSearchText(searchText);
         if (timeout) clearTimeout(timeout);
@@ -24,7 +24,7 @@ const BookList: React.FC<BookListProps> = ({ books, setBooks, onBookSelected }) 
             setError(null);
             const results = await Api.get("http://localhost:8080/book?searchText=" + encodeURIComponent(searchText));
             if (results.status !== 200) {
-                setError(results.data);
+                setError("Search failed");
             } else {
                 setBooks(results.data);
             }
@@ -36,7 +36,6 @@ const BookList: React.FC<BookListProps> = ({ books, setBooks, onBookSelected }) 
             <div>
                 <input type="text" value={searchText} onChange={(e) => updateSearchText(e.target.value)} />
             </div>
-            <div style={{ display: error ? "block" : "none" }}>{error}</div>
             <div className="table">
                 {
                     books.map((book: Book) => {

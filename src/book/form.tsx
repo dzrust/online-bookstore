@@ -5,11 +5,11 @@ import Api from "../api";
 type BookFormProps = {
     book?: Book;
     onClose: () => void;
+    setError: (error: string | null) => void;
 }
 
-const BookForm: React.FC<BookFormProps> = ({ book, onClose }) => {
+const BookForm: React.FC<BookFormProps> = ({ book, onClose, setError }) => {
     const [formBook, setFormBook] = React.useState(book ?? { isbn: "", title: "", author: "", description: "" });
-    const [error, setError] = React.useState(null);
     const updateBookISBN = (isbn: string) => setFormBook({ ...formBook, isbn });
     const updateBookTitle = (title: string) => setFormBook({ ...formBook, title });
     const updateBookAuthor = (author: string) => setFormBook({ ...formBook, author });
@@ -31,9 +31,6 @@ const BookForm: React.FC<BookFormProps> = ({ book, onClose }) => {
     return (
         <div className="modal">
             <h1>Book Form</h1>
-            <div style={{ display: error ? "block" : "none" }}>
-                Error occurred
-            </div>
             <div>
                 <label>Book ISBN:</label>
                 <input type="text" value={formBook.isbn} onChange={(e) => updateBookISBN(e.target.value)} maxLength={20} />

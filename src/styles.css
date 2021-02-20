@@ -149,3 +149,28 @@ button:hover, button:focus {
 .bold {
     font-weight: bold;
 }
+
+.confirmation {
+    z-index: 200;
+    position: absolute;
+    top: 50px;
+    left: 10%;
+    width: 368px;
+    text-align: center;
+}
+
+.error {
+    position: absolute;
+    z-index: 999;
+    top: 50px;
+    left: 25%;
+    height: 50px;
+    width: 200px;
+    background-color: #FF604B;
+    border: 1px solid #FF604B;
+    color: #fff;
+    border-radius: 4px;
+    padding: 5px;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    overflow-y: auto;
+}
