@@ -101,3 +101,11 @@ CREATE PROCEDURE delete_book_inventory(IN id VARCHAR(36), IN isbn VARCHAR(20))
 		DELETE FROM BookInventory bi WHERE bi.id = id;
 		CALL create_book_log (isbn, CONCAT('Removed book from inventory: ',  id));
 	END//
+
+CREATE PROCEDURE read_book_report()
+	BEGIN
+		SELECT b.isbn, b.title, b.author, bi.id, bi.checkedIn
+		FROM Book b
+		LEFT JOIN BookInventory bi
+		ON b.isbn = bi.isbn;
+	END//
