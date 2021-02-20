@@ -16,15 +16,22 @@ enum VIEWS {
 const Home: React.FC = () => {
     const [modalOpen, setModalOpen] = React.useState<VIEWS | null>(null);
     const [selectedBook, setSelectedBook] = React.useState<Book | null>(null);
+    const [books, setBooks] = React.useState<Book[]>([]);
     const selectBook = (book: Book) => {
         setModalOpen(VIEWS.PREVIEW);
         setSelectedBook(book);
     }
-    const closeModal = () => setModalOpen(null);
+    const closeModal = (reload?: boolean) => {
+        setModalOpen(null);
+        setSelectedBook(null);
+        if (reload) {
+            setBooks([]);
+        }
+    }
     const renderModal = () => {
         switch (modalOpen) {
-            case VIEWS.PREVIEW: return selectedBook && <BookPreview book={selectedBook} onClose={closeModal} />;
-            case VIEWS.FORM: return <BookForm onClose={closeModal} />;
+            case VIEWS.PREVIEW: return selectedBook && <BookPreview book={selectedBook} onClose={closeModal} onEdit={() => setModalOpen(VIEWS.FORM)} />;
+            case VIEWS.FORM: return <BookForm onClose={closeModal} book={selectedBook ?? undefined} />;
             case VIEWS.INVENTORY: return <InventoryReport />;
             default: return null;
         }
@@ -40,7 +47,7 @@ const Home: React.FC = () => {
                     </div>
                 </div>
                 <div className="home-content">
-                    <BookList onBookSelected={selectBook} />
+                    <BookList onBookSelected={selectBook} books={books} setBooks={setBooks} />
                 </div>
             </div>
             {

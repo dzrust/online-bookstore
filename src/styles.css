@@ -112,15 +112,14 @@ button:hover, button:focus {
     z-index: 100;
     top: 200px;
     left: 25%;
-    height: 500px;
+    max-height: 500px;
     width: 500px;
     background-color: #fff;
     border: 1px solid #eee;
     border-radius: 4px;
     padding: 40px;
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-    max-height: 500px;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
 .preview {
@@ -134,6 +133,12 @@ button:hover, button:focus {
 
 .preview-body {
     display: flex;
+    flex-direction: column;
+    padding: 10px 0;
+}
+
+.preview-body div {
+    padding: 10px 0;       
 }
 
 .preview-footer {

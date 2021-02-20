@@ -18,7 +18,7 @@ const BookForm: React.FC<BookFormProps> = ({ book, onClose }) => {
     const submitBookForm = async () => {
         setError(null);
         try {
-            const jsonResponse = await Api.post("http://localhost:8080/book", formBook);
+            const jsonResponse = await (!book ? Api.post("http://localhost:8080/book", formBook) : Api.put("http://localhost:8080/book", formBook));
             if (jsonResponse.data && jsonResponse.status === 200) {
                 onClose();
             } else {

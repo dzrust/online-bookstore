@@ -48,7 +48,7 @@ CREATE PROCEDURE read_all_books(searchText VARCHAR(200))
             b.isbn LIKE searchText OR b.title LIKE searchText OR b.author LIKE searchText OR searchText IS NULL;
 	END//
 
-CREATE PROCEDURE create_book_log(IN isbn VARCHAR(20))
+CREATE PROCEDURE create_book_log(IN isbn VARCHAR(20), IN messageLog TEXT)
 	BEGIN
 		INSERT INTO BookLog
 			(id, isbn, updatedDateTime, messageLog)
@@ -59,7 +59,7 @@ CREATE PROCEDURE create_book_log(IN isbn VARCHAR(20))
 CREATE PROCEDURE read_book_log(IN isbn VARCHAR(20))
 	BEGIN
 		SELECT
-			bl.id, bl.updatedDateTime, bl.bookJSON
+			bl.id, bl.updatedDateTime, bl.messageLog
 		FROM
 			BookLog bl
 		WHERE bl.isbn = isbn;

@@ -3,44 +3,54 @@ import { Book } from "../../models/book";
 import Api from "../api";
 
 type BookListProps = {
+    books: Book[];
+    setBooks: (books: Book[]) => void;
     onBookSelected: (book: Book) => void;
 }
 
 let timeout: any | null = null;
 
-const BookList: React.FC<BookListProps> = ({onBookSelected}) => {
+const BookList: React.FC<BookListProps> = ({ books, setBooks, onBookSelected }) => {
     const [searchText, setSearchText] = React.useState("");
     const [error, setError] = React.useState<string | null>(null);
-    const [searchResults, setSearchResults] = React.useState([]);
     const updateSearchText = (searchText: string) => {
-        setSearchText(searchText)
+        setSearchText(searchText);
         if (timeout) clearTimeout(timeout);
         timeout = setTimeout(async () => {
+            if (searchText === "") {
+                setBooks([]);
+                return;
+            }
             setError(null);
-            const results = await Api.get("http://localhost:8080/book?searchText="+encodeURIComponent(searchText));
+            const results = await Api.get("http://localhost:8080/book?searchText=" + encodeURIComponent(searchText));
             if (results.status !== 200) {
                 setError(results.data);
             } else {
-                setSearchResults(results.data);
+                setBooks(results.data);
             }
         }, 500);
     }
+    React.useEffect(() => {
+        if (books.length === 0 && searchText !== "") {
+            setSearchText("");
+        }
+    }, [books])
     return (
         <div>
             Search for book either by isbn, title, or author
             <div>
                 <input type="text" value={searchText} onChange={(e) => updateSearchText(e.target.value)} />
             </div>
-            <div style={{display: error ? "block" : "none"}}>{error}</div>
+            <div style={{ display: error ? "block" : "none" }}>{error}</div>
             <div className="table">
                 {
-                    searchResults.map((searchResult: Book) => {
+                    books.map((book: Book) => {
                         return (
-                            <div key={searchResult.isbn} className="row">
-                                <div className="column">{searchResult.isbn}</div>
-                                <div className="column bold">{searchResult.title}</div>
-                                <div className="column">{searchResult.author}</div>
-                                <button className="column" onClick={() => onBookSelected(searchResult)}>View</button>
+                            <div key={book.isbn} className="row">
+                                <div className="column">{book.isbn}</div>
+                                <div className="column bold">{book.title}</div>
+                                <div className="column">{book.author}</div>
+                                <button className="column" onClick={() => onBookSelected(book)}>View</button>
                             </div>
                         )
                     })

@@ -5,7 +5,7 @@ class API {
         headers: new Headers({ 'content-type': 'application/json' }),
         mode: "cors",
     }
-    post = async (url: string, body: any, requestInit?: RequestInit): Promise<APIResponse> => {
+    post = async (url: string, body?: any, requestInit?: RequestInit): Promise<APIResponse> => {
         let init = requestInit ?? this.defaultBlock;
         if (body) {
             init.body = JSON.stringify(body);
@@ -20,7 +20,7 @@ class API {
         const response = await fetch(url, init);
         return await response.json();
     }
-    put = async (url: string, body: any, requestInit?: RequestInit): Promise<APIResponse> => {
+    put = async (url: string, body?: any, requestInit?: RequestInit): Promise<APIResponse> => {
         let init = requestInit ?? this.defaultBlock;
         if (body) {
             init.body = JSON.stringify(body);
