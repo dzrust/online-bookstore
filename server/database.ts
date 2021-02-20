@@ -1,10 +1,10 @@
 import * as mysql from "mysql";
 
-export const queryCallback = (error: mysql.MysqlError | null, results: any, resolve: (results: any) => void, reject: () => void) => {
+export const queryCallback = (error: mysql.MysqlError | null, results: any, resolve: (results: any) => void, reject: (error: mysql.MysqlError | null) => void) => {
     if (!error && results.length === 2) {
         resolve(results[0]);
     } else {
-        reject();
+        reject(error);
     }
 }
 
