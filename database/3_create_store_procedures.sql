@@ -28,7 +28,7 @@ CREATE PROCEDURE update_book(
 		UPDATE Book b
 			SET b.title=title, b.author=author, b.bookDescription=bookDescription
 		WHERE b.isbn = isbn;
-		CALL create_book_log (isbn, 'Updated: book title - "' + title + '" book author - "' + author + '" book description - "' + bookDescription + '"');
+		CALL create_book_log (isbn, CONCAT('Updated: book title - "', title, '" book author - "', author, '" book description - "', bookDescription, '"'));
 	END//
 
 CREATE PROCEDURE delete_book(IN isbn VARCHAR(20))
@@ -89,14 +89,14 @@ CREATE PROCEDURE update_book_inventory(IN id VARCHAR(36), IN checkedIn BOOLEAN)
 			SET bi.checkedIn = checkedIn
 		WHERE bi.id = id;
 		IF checkedIn THEN
-			CALL create_book_log (isbn, 'Checked In: ' + id);
+			CALL create_book_log (isbn, CONCAT('Checked In: ', id));
 		ELSE
-			CALL create_book_log (isbn, 'Checked out: ' + id);
+			CALL create_book_log (isbn, CONCAT('Checked out: ', id));
 		END IF;
 	END//
 
 CREATE PROCEDURE delete_book_inventory(IN id VARCHAR(36))
 	BEGIN
 		DELETE FROM BookInventory bi WHERE bi.id = id;
-		CALL create_book_log (isbn, 'Removed book from inventory: ' + id);
+		CALL create_book_log (isbn, CONCAT('Removed book from inventory: ',  id));
 	END//
