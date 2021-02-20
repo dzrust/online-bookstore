@@ -36,23 +36,23 @@ let max = 0;
                 if (!item.volumeInfo.industryIdentifiers || item.volumeInfo.industryIdentifiers.length < 1) return Promise.resolve();
                 if (!item.volumeInfo.authors || item.volumeInfo.authors.length < 1) return Promise.resolve();
                 if (!item.volumeInfo.title) return Promise.resolve();
-                try {
-                    let authors = "";
-                    item.volumeInfo.authors.forEach((author: any) => authors += author + "; ");
-                    const book: Book = {
-                        isbn: item.volumeInfo.industryIdentifiers[0].identifier,
-                        author: authors.trim(),
-                        title: item.volumeInfo.title,
-                        description: item.volumeInfo.description,
-                    }
-                    return createBook(book);
-                } catch (err) {
-                    console.log(err);
+                let authors = "";
+                item.volumeInfo.authors.forEach((author: any) => authors += author + "; ");
+                const book: Book = {
+                    isbn: item.volumeInfo.industryIdentifiers[0].identifier,
+                    author: authors.trim(),
+                    title: item.volumeInfo.title,
+                    description: item.volumeInfo.description,
                 }
-                return Promise.resolve();
+                return new Promise((resolve) => createBook(book).then(resolve).catch((err) => {
+                    console.log(err);
+                    resolve(err);
+                }));
+
             }));
         }
         count += 40;
         console.log("Processed: ", count);
     }
+    console.log("Done! Exit with ctlr+c");
 })();
