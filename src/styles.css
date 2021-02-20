@@ -162,15 +162,16 @@ button:hover, button:focus {
 .error {
     position: absolute;
     z-index: 999;
-    top: 50px;
-    left: 25%;
+    font-size: 16px;
+    top: 10px;
+    left: 45%;
     height: 50px;
     width: 200px;
     background-color: #FF604B;
     border: 1px solid #FF604B;
     color: #fff;
     border-radius: 4px;
-    padding: 5px;
-    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    padding: 8px;
+    box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%);
     overflow-y: auto;
 }
