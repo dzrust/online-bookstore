@@ -30,11 +30,6 @@ const BookList: React.FC<BookListProps> = ({ books, setBooks, onBookSelected }) 
             }
         }, 500);
     }
-    React.useEffect(() => {
-        if (books.length === 0 && searchText !== "") {
-            setSearchText("");
-        }
-    }, [books])
     return (
         <div>
             Search for book either by isbn, title, or author
