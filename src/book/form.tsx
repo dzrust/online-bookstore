@@ -54,7 +54,7 @@ const BookForm: React.FC<BookFormProps> = ({ book, onClose }) => {
                 <button onClick={submitBookForm}>
                     Submit
                 </button>
-                <button onClick={onClose}>
+                <button onClick={() => onClose()}>
                     Close
                 </button>
             </div>

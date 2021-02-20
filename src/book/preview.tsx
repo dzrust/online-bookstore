@@ -1,5 +1,6 @@
 import * as React from "react";
 import { Book, BookInventory, BookLog } from "../../models/book";
+import { APIResponse } from "../../models/response";
 import Api from "../api";
 
 type BookPreviewProps = {
@@ -8,74 +9,77 @@ type BookPreviewProps = {
     onEdit: () => void;
 }
 
+let isMounted = false;
+
 const BookPreview: React.FC<BookPreviewProps> = ({ book, onClose, onEdit }) => {
     const [logs, setLogs] = React.useState<BookLog[]>([]);
     const [inventory, setInventory] = React.useState<BookInventory[]>([]);
     const [isLoading, setIsLoading] = React.useState(false);
     const [isUpdating, setIsUpdating] = React.useState(false);
-    const [isMounted, setIsMounted] = React.useState(false);
     const [isLogsOpen, setIsLogsOpen] = React.useState(false);
     const [isInventoryOpen, setIsInventoryOpen] = React.useState(false);
+    const [fullBook, setFullBook] = React.useState(book);
 
     const deleteBook = async () => {
         if (isLoading) return;
         setIsLoading(true);
-        try {
-            const result = await Api.delete(`http://localhost:8080/book/${encodeURIComponent(book.isbn)}`);
-            if (result.status === 200 && isMounted) onClose(true);
-        } catch (err) { }
-        setIsLoading(false);
+        Api.delete(`http://localhost:8080/book/${encodeURIComponent(book.isbn)}`).then(
+            (result) => {
+                if (result.status === 200 && isMounted) onClose(true);
+                setIsLoading(false);
+            }
+        ).catch(() => setIsLoading(false));
     }
 
-    const deleteInventory = async (item: BookInventory) => {
+    const deleteInventory = (item: BookInventory) => {
         if (isUpdating) return;
         setIsUpdating(true);
-        try {
-            const result = await Api.delete(`http://localhost:8080/inventory/${encodeURIComponent(item.id)}`);
-            if (result.status === 200 && isMounted) await loadData();
-        } catch (err) { }
-        setIsUpdating(false);
+        Api.delete(`http://localhost:8080/inventory/${encodeURIComponent(book.isbn)}/${encodeURIComponent(item.id)}`).then(
+            () => loadData().then(() => setIsUpdating(false)).catch(() => setIsUpdating(false))
+        ).catch(() => setIsUpdating(false));
     }
 
-    const addInventory = async () => {
+    const addInventory = () => {
         if (isLoading) return;
         setIsLoading(true);
-        try {
-            const result = await Api.post(`http://localhost:8080/inventory/${encodeURIComponent(book.isbn)}`);
-            if (result.status === 200 && isMounted) await loadData();
-        } catch (err) { }
-        setIsLoading(false);
+        Api.post(`http://localhost:8080/inventory/${encodeURIComponent(book.isbn)}`).then(
+            () => loadData().then(() => setIsUpdating(false)).catch(() => setIsUpdating(false))
+        ).catch(() => setIsUpdating(false));
     }
 
-    const updateInventory = async (item: BookInventory) => {
+    const updateInventory = (item: BookInventory) => {
         if (isUpdating) return;
         setIsUpdating(true);
-        try {
-            const result = await Api.delete(`http://localhost:8080/inventory/${encodeURIComponent(book.isbn)}`, {
-                ...item,
-                checkedIn: !item.checkedIn
-            });
-            if (result.status === 200 && isMounted) await loadData();
-        } catch (err) { }
-        setIsUpdating(false);
+        Api.put(`http://localhost:8080/inventory/${encodeURIComponent(book.isbn)}/${encodeURIComponent(item.id)}`, {
+            ...item,
+            checkedIn: !item.checkedIn
+        }).then(
+            () => loadData().then(() => setIsUpdating(false)).catch(() => setIsUpdating(false))
+        ).catch(() => setIsUpdating(false));
     }
 
-    const getLogs = async () => {
-        const result = await Api.get(`http://localhost:8080/log/${encodeURIComponent(book.isbn)}`);
+    const getBook = () => Api.get(`http://localhost:8080/book/${encodeURIComponent(book.isbn)}`).then((result: APIResponse) => {
+        if (result.status === 200 && isMounted) setFullBook(result.data);
+    });
+
+    const getLogs = () => Api.get(`http://localhost:8080/log/${encodeURIComponent(book.isbn)}`).then((result: APIResponse) => {
         if (result.status === 200 && isMounted) setLogs(result.data);
-    }
+    });
 
-    const getInventory = async () => {
-        const result = await Api.get(`http://localhost:8080/inventory/${encodeURIComponent(book.isbn)}`);
+
+    const getInventory = () => Api.get(`http://localhost:8080/inventory/${encodeURIComponent(book.isbn)}`).then((result: APIResponse) => {
         if (result.status === 200 && isMounted) setInventory(result.data);
-    }
+    });
 
-    const loadData = () => Promise.all([getLogs(), getInventory()]); 
+
+    const loadData = () => Promise.all([getLogs(), getInventory(), getBook()]);
     React.useEffect(() => {
-        setIsMounted(true);
+        isMounted = true;
         setIsLoading(true);
         loadData().then(() => setIsLoading(false)).catch(() => setIsLoading(false));
-        return () => setIsMounted(false);
+        return () => {
+            isMounted = false;
+        }
     }, []);
     return (
         <div className="modal">
@@ -86,7 +90,7 @@ const BookPreview: React.FC<BookPreviewProps> = ({ book, onClose, onEdit }) => {
                 <div className="preview-body">
                     <div>ISBN: {book.isbn}</div>
                     <div>Author: {book.author}</div>
-                    <div>Description: {book.description}</div>
+                    <div>Description: {fullBook.description}</div>
                     <div onClick={() => setIsInventoryOpen(!isInventoryOpen)}>
                         Inventory ({inventory.length}) {isInventoryOpen ? "-" : "O"}
                         <button onClick={addInventory} disabled={isLoading || isUpdating}>Add Inventory</button>

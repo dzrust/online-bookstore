@@ -40,7 +40,7 @@ const Home: React.FC = () => {
         <div className="home">
             <div className="home-container">
                 <div className="home-header">
-                    <h3>Welcome to your online bookstore manager!</h3>
+                    <h1>Book Sm4rt!</h1>
                     <div className="home-header-btns">
                         <button onClick={() => setModalOpen(VIEWS.FORM)}>Add Book</button>
                         <button onClick={() => setModalOpen(VIEWS.INVENTORY)}>Inventory Report</button>
