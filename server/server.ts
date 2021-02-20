@@ -1,6 +1,7 @@
 import * as express from "express";
 import * as mappings from "../pages/server_mapping.json";
 import * as path from "path";
+import * as bodyParser from "body-parser";
 import { setupBookRoutes } from "./book";
 import { setupInventoryRoutes } from "./inventory";
 import { setupLogRoutes } from "./log";
@@ -12,7 +13,8 @@ mappings.mappings.forEach((mapping: any) => {
     app.get(mapping.path, (req: express.Request, res: express.Response) => res.sendFile(path.join(__dirname, "../pages", `${mapping.file}`)));
 });
 
-app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 app.get("/scripts/index.js",
     (req: express.Request, res: express.Response) => res.sendFile(path.join(__dirname, "..", "dist/index.js"))

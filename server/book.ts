@@ -55,7 +55,7 @@ export const deleteBook = async (isbn: string) => {
 export const readAllBooks = async (searchText: string): Promise<Book[]> => {
     const booksResult: any[] = await new Promise((resolve, reject) => {
         database.getConnection().query(
-            "CALL read_all_books(?);", [searchText], (error, results) => {
+            "CALL read_all_books(?);", [`%${searchText}%`], (error, results) => {
                 queryCallback(error, results, resolve, reject);
             });
     });
@@ -96,7 +96,7 @@ export const setupBookRoutes = (app: express.Application) => {
         });
     });
     app.get("/book", (req: express.Request, res: express.Response) => {
-        const {searchText} = req.body;
+        const searchText = req.query.searchText as string;
         if (searchText && searchText.length > 200) {
             res.send(createResponse("Search text cannot be greater than 200 characters", 200));
         }

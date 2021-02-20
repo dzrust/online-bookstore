@@ -20,22 +20,28 @@ const Home: React.FC = () => {
         setModalOpen(VIEWS.PREVIEW);
         setSelectedBook(book);
     }
+    const closeModal = () => setModalOpen(null);
     const renderModal = () => {
         switch (modalOpen) {
-            case VIEWS.LIST: return <BookList onBookSelected={selectBook} />;
-            case VIEWS.PREVIEW: return selectedBook && <BookPreview book={selectedBook} />;
-            case VIEWS.FORM: return <BookForm onClose={() => setModalOpen(null)} />;
+            case VIEWS.PREVIEW: return selectedBook && <BookPreview book={selectedBook} onClose={closeModal} />;
+            case VIEWS.FORM: return <BookForm onClose={closeModal} />;
             case VIEWS.INVENTORY: return <InventoryReport />;
             default: return null;
         }
     }
     return (
-        <div>
-            Welcome to your online bookstore manager!
-            <div>
-                <button onClick={() => setModalOpen(VIEWS.FORM)}>Add new book</button>
-                <button onClick={() => setModalOpen(VIEWS.LIST)}>Find Book</button>
-                <button onClick={() => setModalOpen(VIEWS.INVENTORY)}>Run inventory report</button>
+        <div className="home">
+            <div className="home-container">
+                <div className="home-header">
+                    <h3>Welcome to your online bookstore manager!</h3>
+                    <div className="home-header-btns">
+                        <button onClick={() => setModalOpen(VIEWS.FORM)}>Add Book</button>
+                        <button onClick={() => setModalOpen(VIEWS.INVENTORY)}>Inventory Report</button>
+                    </div>
+                </div>
+                <div className="home-content">
+                    <BookList onBookSelected={selectBook} />
+                </div>
             </div>
             {
                 renderModal()

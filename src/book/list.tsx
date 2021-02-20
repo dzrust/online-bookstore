@@ -31,15 +31,16 @@ const BookList: React.FC<BookListProps> = ({onBookSelected}) => {
             <div>
                 <input type="text" value={searchText} onChange={(e) => updateSearchText(e.target.value)} />
             </div>
-            <div>
+            <div style={{display: error ? "block" : "none"}}>{error}</div>
+            <div className="table">
                 {
                     searchResults.map((searchResult: Book) => {
                         return (
-                            <div key={searchResult.isbn}>
-                                <div>{searchResult.isbn}</div>
-                                <div>{searchResult.title}</div>
-                                <div>{searchResult.author}</div>
-                                <div onClick={() => onBookSelected(searchResult)}>View</div>
+                            <div key={searchResult.isbn} className="row">
+                                <div className="column">{searchResult.isbn}</div>
+                                <div className="column bold">{searchResult.title}</div>
+                                <div className="column">{searchResult.author}</div>
+                                <button className="column" onClick={() => onBookSelected(searchResult)}>View</button>
                             </div>
                         )
                     })

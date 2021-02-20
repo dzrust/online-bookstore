@@ -7,8 +7,8 @@ type BookFormProps = {
     onClose: () => void;
 }
 
-const BookForm: React.FC<BookFormProps> = (props) => {
-    const [formBook, setFormBook] = React.useState(props.book ?? { isbn: "", title: "", author: "", description: "" });
+const BookForm: React.FC<BookFormProps> = ({ book, onClose }) => {
+    const [formBook, setFormBook] = React.useState(book ?? { isbn: "", title: "", author: "", description: "" });
     const [error, setError] = React.useState(null);
     const updateBookISBN = (isbn: string) => setFormBook({ ...formBook, isbn });
     const updateBookTitle = (title: string) => setFormBook({ ...formBook, title });
@@ -20,7 +20,7 @@ const BookForm: React.FC<BookFormProps> = (props) => {
         try {
             const jsonResponse = await Api.post("http://localhost:8080/book", formBook);
             if (jsonResponse.data && jsonResponse.status === 200) {
-                props.onClose();
+                onClose();
             } else {
                 setError(jsonResponse.data);
             }
@@ -29,30 +29,36 @@ const BookForm: React.FC<BookFormProps> = (props) => {
         }
     }
     return (
-        <div>
+        <div className="modal">
             <h1>Book Form</h1>
             <div style={{ display: error ? "block" : "none" }}>
                 Error occurred
             </div>
             <div>
-                <div>Book ISBN:</div>
+                <label>Book ISBN:</label>
                 <input type="text" value={formBook.isbn} onChange={(e) => updateBookISBN(e.target.value)} maxLength={20} />
             </div>
             <div>
-                <div>Book Title:</div>
+                <label>Book Title:</label>
                 <input type="text" value={formBook.title} onChange={(e) => updateBookTitle(e.target.value)} maxLength={200} />
             </div>
             <div>
-                <div>Book Author:</div>
+                <label>Book Author:</label>
                 <input type="text" value={formBook.author} onChange={(e) => updateBookAuthor(e.target.value)} maxLength={200} />
             </div>
             <div>
-                <div>Book Description:</div>
+                <label>Book Description:</label>
                 <input type="text" value={formBook.description} onChange={(e) => updateBookDescription(e.target.value)} />
             </div>
-            <div onClick={submitBookForm}>
-                Submit
+            <div>
+                <button onClick={submitBookForm}>
+                    Submit
+                </button>
+                <button onClick={onClose}>
+                    Close
+                </button>
             </div>
+
         </div>
     )
 }
