@@ -1,5 +1,5 @@
-import express from "express"
-import { Book, BookLog } from "../models/book"
+import * as express from "express"
+import { Book } from "../models/book"
 import database, { queryCallback } from "./database"
 import { createResponse } from "./response";
 
@@ -59,7 +59,7 @@ export const readAllBooks = async (): Promise<Book[]> => {
                 queryCallback(error, results, resolve, reject);
             });
     });
-    return booksResult.map((bookResult) => ({
+    return booksResult.map((bookResult: any) => ({
         isbn: bookResult.isbn,
         title: bookResult.title,
         author: bookResult.author,

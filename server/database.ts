@@ -1,6 +1,6 @@
 import * as mysql from "mysql";
 
-export const queryCallback = (error, results, resolve, reject) => {
+export const queryCallback = (error: mysql.MysqlError | null, results: any, resolve:  (results:any) => void, reject: () => void) => {
     if (!error) resolve(results);
     reject();
 }
@@ -10,12 +10,12 @@ class Database {
 
     public openDatabse = () => {
         this.dbConnection = mysql.createConnection({
-            host: "localhost",
-            user: "me",
-            password: "secret",
-            database: "my_db"
+            host: "bookstore.c1r50rjcihgr.us-west-2.rds.amazonaws.com",
+            user: "admin",
+            password: "aUP50yshetLhSBcjXCvW",
+            database: "bookstore"
         });
-        this.dbConnection.connect();
+        //this.dbConnection.connect();
     }
 
     public getConnection () {

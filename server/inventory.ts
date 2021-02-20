@@ -1,4 +1,4 @@
-import express from "express"
+import * as express from "express"
 import { BookInventory } from "../models/book"
 import database, { queryCallback } from "./database"
 import { createResponse } from "./response";
@@ -23,7 +23,7 @@ export const readBookInventory = async (isbn: string): Promise<BookInventory[]> 
                 queryCallback(error, results, resolve, reject);
             });
     });
-    return bookLogsResult.map((bookLogResult) => ({
+    return bookLogsResult.map((bookLogResult: any) => ({
         id: bookLogResult.id,
         checkedIn: bookLogResult.checkedIn
     }));

@@ -1,7 +1,6 @@
 import * as React from "react";
-import "../styles.css";
 
-const Home: React.FC = () => {
+const InventoryReport: React.FC = () => {
     return (
         <div>
             Welcome to your online bookstore manager!
@@ -14,4 +13,4 @@ const Home: React.FC = () => {
     )
 }
 
-export default Home;
+export default InventoryReport;

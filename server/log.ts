@@ -1,18 +1,18 @@
-import express from "express"
+import * as express from "express"
 import { BookLog } from "../models/book"
 import database, { queryCallback } from "./database"
 import { createResponse } from "./response";
 
 
 export const readBookLog = async (isbn: string): Promise<BookLog[]> => {
-    const bookLogsResult: any = await new Promise((resolve, reject) => {
+    const bookLogsResult: any[] = await new Promise((resolve, reject) => {
         database.getConnection().query(
             "CALL read_book_log(?);",
             [isbn], (error, results) => {
                 queryCallback(error, results, resolve, reject);
             });
     });
-    return bookLogsResult.map((bookLogResult) => ({
+    return bookLogsResult.map((bookLogResult: any) => ({
         id: bookLogResult.id,
         dateTime: bookLogResult.updatedDateTime,
         message: bookLogResult.messageLog
