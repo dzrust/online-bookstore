@@ -15,8 +15,8 @@ enum VIEWS {
 const Home: React.FC = () => {
     const [modalOpen, setModalOpen] = React.useState<VIEWS | null>(null);
     const [selectedBook, setSelectedBook] = React.useState<Book | null>(null);
-    const [books, setBooks] = React.useState<Book[]>([]);
     const [error, setError] = React.useState<string | null>(null);
+    const [reloadObject, setReloadObject] = React.useState({});
     const selectBook = (book: Book) => {
         setModalOpen(VIEWS.PREVIEW);
         setSelectedBook(book);
@@ -25,7 +25,7 @@ const Home: React.FC = () => {
         setModalOpen(null);
         setSelectedBook(null);
         if (reload) {
-            setBooks([]);
+            setReloadObject({});
         }
     }
     const renderModal = () => {
@@ -46,7 +46,7 @@ const Home: React.FC = () => {
                     </div>
                 </div>
                 <div className="home-content">
-                    <BookList onBookSelected={selectBook} books={books} setBooks={setBooks} setError={setError} />
+                    <BookList onBookSelected={selectBook} reloadObject={reloadObject} setError={setError} />
                 </div>
             </div>
             {

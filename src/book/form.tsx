@@ -4,7 +4,7 @@ import Api from "../api";
 
 type BookFormProps = {
     book?: Book;
-    onClose: () => void;
+    onClose: (reload?: boolean) => void;
     setError: (error: string | null) => void;
 }
 
@@ -20,7 +20,7 @@ const BookForm: React.FC<BookFormProps> = ({ book, onClose, setError }) => {
         try {
             const jsonResponse = await (!book ? Api.post("http://localhost:8080/book", formBook) : Api.put("http://localhost:8080/book", formBook));
             if (jsonResponse.data && jsonResponse.status === 200) {
-                onClose();
+                onClose(true);
             } else {
                 setError(jsonResponse.data);
             }

@@ -13,7 +13,7 @@ export const createCSVReport = async (): Promise<string> => {
                 });
         });
         booksResult.forEach((result: any) => {
-            csv += `${result.isbn},${result.id},${result.title},${result.author},${result.checkedIn ? "Y" : "N"}\n`
+            csv += `${result.isbn.replace(/,/gm, "")},${(result.id ?? "").replace(/,/gm, "")},${result.title.replace(/,/gm, "")},${result.author.replace(/,/gm, "")},${result.checkedIn ? "Y" : "N"}\n`
         });
     } catch (err) {
         console.log(err)

@@ -3,33 +3,39 @@ import { Book } from "../../models/book";
 import Api from "../api";
 
 type BookListProps = {
-    books: Book[];
-    setBooks: (books: Book[]) => void;
+    reloadObject: object
     onBookSelected: (book: Book) => void;
     setError: (error: string | null) => void;
 }
 
 let timeout: any | null = null;
 
-const BookList: React.FC<BookListProps> = ({ books, setBooks, onBookSelected, setError }) => {
+const BookList: React.FC<BookListProps> = ({ reloadObject, onBookSelected, setError }) => {
     const [searchText, setSearchText] = React.useState("");
+    const [books, setBooks] = React.useState<Book[]>([]);
     const updateSearchText = (searchText: string) => {
         setSearchText(searchText);
         if (timeout) clearTimeout(timeout);
-        timeout = setTimeout(async () => {
-            if (searchText === "") {
-                setBooks([]);
-                return;
-            }
-            setError(null);
-            const results = await Api.get("http://localhost:8080/book?searchText=" + encodeURIComponent(searchText));
-            if (results.status !== 200) {
-                setError("Search failed");
-            } else {
-                setBooks(results.data);
-            }
-        }, 500);
+        timeout = setTimeout(getBooks, 500);
     }
+
+    const getBooks = async () => {
+        if (searchText === "") {
+            setBooks([]);
+            return;
+        }
+        setError(null);
+        const results = await Api.get("http://localhost:8080/book?searchText=" + encodeURIComponent(searchText));
+        if (results.status !== 200) {
+            setError("Search failed");
+        } else {
+            setBooks(results.data);
+        }
+    }
+
+    React.useEffect(() => {
+        getBooks();
+    }, [reloadObject]);
     return (
         <div>
             Search for book either by isbn, title, or author
