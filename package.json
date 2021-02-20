@@ -8,6 +8,7 @@
     "build-docker": "docker compose build",
     "build-fe": "webpack",
     "build-fe-watch": "webpack -w",
+    "fill-db": "ts-node ./fill_db.ts",
     "start": "ts-node ./server/server.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

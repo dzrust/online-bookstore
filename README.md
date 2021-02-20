@@ -10,8 +10,9 @@ This project uses:
 
 Run:
 - `npm i`
+- `npm run-script build-docker`
 - `npm run-script start-docker`
-
+- `npm run-script fill_db.ts`
 Browse:
 [localhost](http://localhost:3000)
 
