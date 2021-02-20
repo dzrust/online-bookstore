@@ -16,10 +16,10 @@ const BookList: React.FC<BookListProps> = ({ reloadObject, onBookSelected, setEr
     const updateSearchText = (searchText: string) => {
         setSearchText(searchText);
         if (timeout) clearTimeout(timeout);
-        timeout = setTimeout(getBooks, 500);
+        timeout = setTimeout(() => getBooks(searchText), 500);
     }
 
-    const getBooks = async () => {
+    const getBooks = async (searchText: string) => {
         if (searchText === "") {
             setBooks([]);
             return;
@@ -34,7 +34,7 @@ const BookList: React.FC<BookListProps> = ({ reloadObject, onBookSelected, setEr
     }
 
     React.useEffect(() => {
-        getBooks();
+        getBooks(searchText);
     }, [reloadObject]);
     return (
         <div>
