@@ -16,6 +16,7 @@ const Inventory: React.FC<InventoryProps> = ({ inventory, book, isLoading, setEr
     const [isUpdating, setIsUpdating] = React.useState(false);
     const [isConfirmingDeleteInventory, setIsConfirmingDeleteInventory] = React.useState(false);
     const deleteInventory = (item: BookInventory) => {
+        setIsConfirmingDeleteInventory(false);
         if (isUpdating) return;
         setError(null);
         setIsUpdating(true);
@@ -55,8 +56,10 @@ const Inventory: React.FC<InventoryProps> = ({ inventory, book, isLoading, setEr
     }
     return (
         <div>
-            <div onClick={() => setIsInventoryOpen(!isInventoryOpen)}>
-                Inventory ({inventory.length}) {isInventoryOpen ? "-" : "O"}
+            <div>
+                <div className="pointer" onClick={() => setIsInventoryOpen(!isInventoryOpen)}>
+                    Inventory ({inventory.length}) {isInventoryOpen ? "-" : "O"}
+                </div>
                 <button onClick={addInventory} disabled={isLoading || isUpdating}>Add Inventory</button>
             </div>
             {

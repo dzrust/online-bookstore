@@ -43,6 +43,7 @@ button {
     border-radius: 4px;
     padding: 10px;
     margin: 0 5px;
+    cursor: pointer;
 }
 
 button:hover, button:focus {
@@ -174,4 +175,8 @@ button:hover, button:focus {
     padding: 8px;
     box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%);
     overflow-y: auto;
+}
+
+.pointer {
+    cursor: pointer;
 }

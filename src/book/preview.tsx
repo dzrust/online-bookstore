@@ -21,6 +21,7 @@ const BookPreview: React.FC<BookPreviewProps> = ({ book, onClose, onEdit, setSel
     const [isConfirmingDeleteBook, setIsConfirmingDeleteBook] = React.useState(false);
 
     const deleteBook = async () => {
+        setIsConfirmingDeleteBook(false);
         if (isLoading) return;
         setError(null);
         setIsLoading(true);

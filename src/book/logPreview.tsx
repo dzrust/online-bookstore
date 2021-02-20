@@ -10,7 +10,7 @@ const LogPreview: React.FC<LogPreviewProps> = ({ logs, isLoading }) => {
     const [isLogsOpen, setIsLogsOpen] = React.useState(false);
     return (
         <div>
-            <div onClick={() => setIsLogsOpen(!isLogsOpen)}>
+            <div className="pointer" onClick={() => setIsLogsOpen(!isLogsOpen)}>
                 Logs {isLogsOpen ? "-" : "O"}
             </div>
             {

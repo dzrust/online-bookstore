@@ -12,9 +12,10 @@ Run:
 - `npm i`
 - `npm run-script build-docker`
 - `npm run-script start-docker`
-- `npm run-script fill_db.ts`
+- Once the two aforementioned commands are done run this to fill db: `npm run-script fill-db`
+
 Browse:
-[localhost](http://localhost:3000)
+[localhost](http://localhost:8080)
 
 ## Project Requirements
 - [x] API for CRUD of a books, managing title, author, isbn, description
