@@ -3,6 +3,7 @@ import { Book } from "../../models/book";
 
 type BookFormProps = {
     book?: Book;
+    onClose: () => void;
 }
 
 const BookForm: React.FC<BookFormProps> = (props) => {
@@ -18,11 +19,13 @@ const BookForm: React.FC<BookFormProps> = (props) => {
         try {
             const response = await fetch("http://localhost:8080/book", {
                 body: JSON.stringify(formBook),
+                headers: new Headers({ 'content-type': 'application/json' }),
+                mode: "cors",
                 method: props.book ? "PUT" : "POST"
             });
             const jsonResponse = await response.json();
             if (jsonResponse.data && jsonResponse.status === 200) {
-                //close
+                props.onClose();
             } else {
                 setError(jsonResponse.data);
             }
@@ -33,7 +36,7 @@ const BookForm: React.FC<BookFormProps> = (props) => {
     return (
         <div>
             <h1>Book Form</h1>
-            <div style={{ display: !error ? "block" : "none" }}>
+            <div style={{ display: error ? "block" : "none" }}>
                 Error occurred
             </div>
             <div>

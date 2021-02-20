@@ -67,9 +67,28 @@ export const readAllBooks = async (): Promise<Book[]> => {
     }));
 }
 
+const validateBook = (book: Book): { valid: boolean, message: string } => {
+    if (book.isbn.length < 10 || book.isbn.length > 20) {
+        return { valid: false, message: "ISBN must be between 10 and 20 characters" };
+    }
+    if (book.title.length < 1 || book.title.length > 200) {
+        return { valid: false, message: "Title must be between 1 and 200 characters" };
+    }
+    if (book.author.length < 1 || book.author.length > 200) {
+        return { valid: false, message: "Author must be between 1 and 200 characters" };
+    }
+    return { valid: true, message: "" };
+};
+
 export const setupBookRoutes = (app: express.Application) => {
     app.post("/book", (req: express.Request, res: express.Response) => {
-        const book = req.body;
+        const book: Book = req.body;
+        console.log(book);
+        const validation = validateBook(book);
+        if (!validation.valid) {
+            res.send(createResponse(validation.message, 400));
+            return;
+        }
         createBook(book).then(() => {
             res.send(createResponse(true, 200));
         }).catch((err) => {
@@ -93,6 +112,11 @@ export const setupBookRoutes = (app: express.Application) => {
     });
     app.put("/book", (req: express.Request, res: express.Response) => {
         const book = req.body;
+        const validation = validateBook(book);
+        if (!validation.valid) {
+            res.send(createResponse(validation.message, 400));
+            return;
+        }
         updateBook(book).then(() => {
             res.send(createResponse(true, 200));
         }).catch((err) => {

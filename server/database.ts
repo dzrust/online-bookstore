@@ -1,8 +1,11 @@
 import * as mysql from "mysql";
 
 export const queryCallback = (error: mysql.MysqlError | null, results: any, resolve: (results: any) => void, reject: () => void) => {
-    if (!error) resolve(results);
-    reject();
+    if (!error) {
+        resolve(results);
+    } else {
+        reject();
+    }
 }
 
 class Database {
@@ -11,7 +14,8 @@ class Database {
     public openDatabase = () => {
         try {
             this.dbConnection = mysql.createConnection({
-                host: "online-bookstore_database_1.online-bookstore_default",
+                //host: "online-bookstore_database_1.online-bookstore_default",
+                host: "localhost",
                 user: "root",
                 password: "password",
                 database: "bookstore"
