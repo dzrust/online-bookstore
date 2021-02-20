@@ -1,5 +1,6 @@
 import * as React from "react";
 import { Book } from "../../models/book";
+import Api from "../api";
 
 type BookFormProps = {
     book?: Book;
@@ -17,13 +18,7 @@ const BookForm: React.FC<BookFormProps> = (props) => {
     const submitBookForm = async () => {
         setError(null);
         try {
-            const response = await fetch("http://localhost:8080/book", {
-                body: JSON.stringify(formBook),
-                headers: new Headers({ 'content-type': 'application/json' }),
-                mode: "cors",
-                method: props.book ? "PUT" : "POST"
-            });
-            const jsonResponse = await response.json();
+            const jsonResponse = await Api.post("http://localhost:8080/book", formBook);
             if (jsonResponse.data && jsonResponse.status === 200) {
                 props.onClose();
             } else {

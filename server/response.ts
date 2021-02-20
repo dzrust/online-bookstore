@@ -1,6 +1,8 @@
+import {APIResponse} from "../models/response";
 export const  createResponse = (data: any, status: number): string => {
-    return JSON.stringify({
+    let response: APIResponse = {
         data,
         status
-    });
+    };
+    return JSON.stringify(response);
 }

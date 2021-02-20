@@ -7,6 +7,8 @@ services:
     links:
       - database
     restart: always
+    environment: 
+      DB_HOSTNAME: online-bookstore_database_1
   database:
     build: ./database
     ports:

@@ -14,8 +14,7 @@ class Database {
     public openDatabase = () => {
         try {
             this.dbConnection = mysql.createConnection({
-                //host: "online-bookstore_database_1.online-bookstore_default",
-                host: "localhost",
+                host: process.env.DB_HOSTNAME ?? "localhost",
                 user: "root",
                 password: "password",
                 database: "bookstore"

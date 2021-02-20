@@ -38,12 +38,14 @@ CREATE PROCEDURE delete_book(IN isbn VARCHAR(20))
 	   DELETE FROM BookLog bl WHERE bl.isbn = isbn;
 	END//
 
-CREATE PROCEDURE read_all_books()
+CREATE PROCEDURE read_all_books(searchText VARCHAR(200))
 	BEGIN
 		SELECT 
 			b.isbn, b.title, b.author
 		FROM
-			Book b;
+			Book b
+        WHERE
+            b.isbn LIKE searchText OR b.title LIKE searchText OR b.author LIKE searchText OR searchText IS NULL;
 	END//
 
 CREATE PROCEDURE create_book_log(IN isbn VARCHAR(20))

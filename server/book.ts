@@ -52,10 +52,10 @@ export const deleteBook = async (isbn: string) => {
     });
 }
 
-export const readAllBooks = async (): Promise<Book[]> => {
+export const readAllBooks = async (searchText: string): Promise<Book[]> => {
     const booksResult: any[] = await new Promise((resolve, reject) => {
         database.getConnection().query(
-            "CALL read_all_books();", (error, results) => {
+            "CALL read_all_books(?);", [searchText], (error, results) => {
                 queryCallback(error, results, resolve, reject);
             });
     });
@@ -96,7 +96,11 @@ export const setupBookRoutes = (app: express.Application) => {
         });
     });
     app.get("/book", (req: express.Request, res: express.Response) => {
-        readAllBooks().then((books) => {
+        const {searchText} = req.body;
+        if (searchText && searchText.length > 200) {
+            res.send(createResponse("Search text cannot be greater than 200 characters", 200));
+        }
+        readAllBooks(searchText).then((books) => {
             res.send(createResponse(books, 200));
         }).catch((err) => {
             res.send(createResponse(err, 500));

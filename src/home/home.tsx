@@ -1,16 +1,31 @@
 import * as React from "react";
+import { Book } from "../../models/book";
+import BookForm from "../book/form";
+import BookList from "../book/list";
+import BookPreview from "../book/preview";
 import "../styles.css";
-import BookFinder from "./bookFinder";
-import BookForm from "./bookForm";
 import InventoryReport from "./inventoryReport";
 
+enum VIEWS {
+    LIST,
+    PREVIEW,
+    FORM,
+    INVENTORY
+}
+
 const Home: React.FC = () => {
-    const [modalOpen, setModalOpen] = React.useState<string | null>(null);
+    const [modalOpen, setModalOpen] = React.useState<VIEWS | null>(null);
+    const [selectedBook, setSelectedBook] = React.useState<Book | null>(null);
+    const selectBook = (book: Book) => {
+        setModalOpen(VIEWS.PREVIEW);
+        setSelectedBook(book);
+    }
     const renderModal = () => {
         switch (modalOpen) {
-            case "FINDER": return <BookFinder />;
-            case "FORM": return <BookForm onClose={() => setModalOpen(null)} />;
-            case "INVENTORY": return <InventoryReport />;
+            case VIEWS.LIST: return <BookList onBookSelected={selectBook} />;
+            case VIEWS.PREVIEW: return selectedBook && <BookPreview book={selectedBook} />;
+            case VIEWS.FORM: return <BookForm onClose={() => setModalOpen(null)} />;
+            case VIEWS.INVENTORY: return <InventoryReport />;
             default: return null;
         }
     }
@@ -18,9 +33,9 @@ const Home: React.FC = () => {
         <div>
             Welcome to your online bookstore manager!
             <div>
-                <button onClick={() => setModalOpen("FORM")}>Add new book</button>
-                <button onClick={() => setModalOpen("FINDER")}>Find Book</button>
-                <button onClick={() => setModalOpen("INVENTORY")}>Run inventory report</button>
+                <button onClick={() => setModalOpen(VIEWS.FORM)}>Add new book</button>
+                <button onClick={() => setModalOpen(VIEWS.LIST)}>Find Book</button>
+                <button onClick={() => setModalOpen(VIEWS.INVENTORY)}>Run inventory report</button>
             </div>
             {
                 renderModal()
