@@ -83,11 +83,12 @@ CREATE PROCEDURE read_book_inventory(IN isbn VARCHAR(20))
 		WHERE bi.isbn = isbn;
 	END//
 
-CREATE PROCEDURE update_book_inventory(IN id VARCHAR(36), IN checkedIn BOOLEAN)
+CREATE PROCEDURE update_book_inventory(IN id VARCHAR(36), IN checkedIn BOOLEAN, IN isbn VARCHAR(20))
 	BEGIN
 		UPDATE BookInventory bi
 			SET bi.checkedIn = checkedIn
 		WHERE bi.id = id;
+
 		IF checkedIn THEN
 			CALL create_book_log (isbn, CONCAT('Checked In: ', id));
 		ELSE
@@ -95,7 +96,7 @@ CREATE PROCEDURE update_book_inventory(IN id VARCHAR(36), IN checkedIn BOOLEAN)
 		END IF;
 	END//
 
-CREATE PROCEDURE delete_book_inventory(IN id VARCHAR(36))
+CREATE PROCEDURE delete_book_inventory(IN id VARCHAR(36), IN isbn VARCHAR(20))
 	BEGIN
 		DELETE FROM BookInventory bi WHERE bi.id = id;
 		CALL create_book_log (isbn, CONCAT('Removed book from inventory: ',  id));

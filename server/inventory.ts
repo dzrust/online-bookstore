@@ -29,22 +29,22 @@ export const readBookInventory = async (isbn: string): Promise<BookInventory[]> 
     }));
 }
 
-export const updateBookInventory = async (id: string, checkedIn: boolean) => {
+export const updateBookInventory = async (id: string, checkedIn: boolean, isbn: string) => {
     await new Promise((resolve, reject) => {
         database.getConnection().query(
-            "CALL update_book_inventory(?, ?);",
-            [id, checkedIn],
+            "CALL update_book_inventory(?, ?, ?);",
+            [id, checkedIn, isbn],
             (error, results) => {
                 queryCallback(error, results, resolve, reject);
             });
     });
 }
 
-export const deleteBookInventory = async (id: string) => {
+export const deleteBookInventory = async (id: string, isbn: string) => {
     await new Promise((resolve, reject) => {
         database.getConnection().query(
-            "CALL delete_book_inventory(?);",
-            [id],
+            "CALL delete_book_inventory(?, ?);",
+            [id, isbn],
             (error, results) => {
                 queryCallback(error, results, resolve, reject);
             });
@@ -68,18 +68,20 @@ export const setupInventoryRoutes = (app: express.Application) => {
             res.send(createResponse(err, 500));
         });
     });
-    app.put("/inventory/:isbn", (req: express.Request, res: express.Response) => {
+    app.put("/inventory/:isbn/:id", (req: express.Request, res: express.Response) => {
         const isbn = req.params.isbn;
+        const id = req.params.id;
         const checkedIn = req.body.checkedIn;
-        updateBookInventory(isbn, checkedIn).then(() => {
+        updateBookInventory(id, checkedIn, isbn).then(() => {
             res.send(createResponse(true, 200));
         }).catch((err) => {
             res.send(createResponse(err, 500));
         });
     });
-    app.delete("/inventory/:isbn", (req: express.Request, res: express.Response) => {
+    app.delete("/inventory/:isbn/:id", (req: express.Request, res: express.Response) => {
         const isbn = req.params.isbn;
-        readBookInventory(isbn).then(() => {
+        const id = req.params.id;
+        deleteBookInventory(id, isbn).then(() => {
             res.send(createResponse(true, 200));
         }).catch((err) => {
             res.send(createResponse(err, 500));

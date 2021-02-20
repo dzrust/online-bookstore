@@ -1,7 +1,7 @@
 import * as mysql from "mysql";
 
 export const queryCallback = (error: mysql.MysqlError | null, results: any, resolve: (results: any) => void, reject: (error: mysql.MysqlError | null) => void) => {
-    if (!error && results.length === 2) {
+    if (!error) {
         resolve(results[0]);
     } else {
         reject(error);
