@@ -26,7 +26,7 @@ class Database {
                     return;
                 }
 
-                console.log('connected as id ' + this.dbConnection.threadId);
+                console.log("connected as id " + this.dbConnection.threadId);
             });
         } catch (err) {
             console.log("Failed to connect to DB");

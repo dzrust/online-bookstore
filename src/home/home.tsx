@@ -4,13 +4,11 @@ import BookForm from "../book/form";
 import BookList from "../book/list";
 import BookPreview from "../book/preview";
 import "../styles.css";
-import InventoryReport from "./inventoryReport";
 
 enum VIEWS {
     LIST,
     PREVIEW,
-    FORM,
-    INVENTORY
+    FORM
 }
 
 const Home: React.FC = () => {
@@ -32,7 +30,6 @@ const Home: React.FC = () => {
         switch (modalOpen) {
             case VIEWS.PREVIEW: return selectedBook && <BookPreview book={selectedBook} onClose={closeModal} onEdit={() => setModalOpen(VIEWS.FORM)} />;
             case VIEWS.FORM: return <BookForm onClose={closeModal} book={selectedBook ?? undefined} />;
-            case VIEWS.INVENTORY: return <InventoryReport />;
             default: return null;
         }
     }
@@ -43,7 +40,7 @@ const Home: React.FC = () => {
                     <h1>Book Sm4rt!</h1>
                     <div className="home-header-btns">
                         <button onClick={() => setModalOpen(VIEWS.FORM)}>Add Book</button>
-                        <button onClick={() => setModalOpen(VIEWS.INVENTORY)}>Inventory Report</button>
+                        <a href="/report" target="_blank">Inventory Report</a>
                     </div>
                 </div>
                 <div className="home-content">

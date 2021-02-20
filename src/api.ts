@@ -1,10 +1,12 @@
 import { APIResponse } from "../models/response";
 
 class API {
-    private defaultBlock: RequestInit = {
-        headers: new Headers({ 'content-type': 'application/json' }),
-        mode: "cors",
-    }
+    private get defaultBlock(): RequestInit {
+        return {
+            headers: new Headers({ "content-type": "application/json" }),
+            mode: "cors",
+        }
+    };
     post = async (url: string, body?: any, requestInit?: RequestInit): Promise<APIResponse> => {
         let init = requestInit ?? this.defaultBlock;
         if (body) {

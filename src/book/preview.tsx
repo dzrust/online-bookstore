@@ -9,8 +9,6 @@ type BookPreviewProps = {
     onEdit: () => void;
 }
 
-let isMounted = false;
-
 const BookPreview: React.FC<BookPreviewProps> = ({ book, onClose, onEdit }) => {
     const [logs, setLogs] = React.useState<BookLog[]>([]);
     const [inventory, setInventory] = React.useState<BookInventory[]>([]);
@@ -25,7 +23,9 @@ const BookPreview: React.FC<BookPreviewProps> = ({ book, onClose, onEdit }) => {
         setIsLoading(true);
         Api.delete(`http://localhost:8080/book/${encodeURIComponent(book.isbn)}`).then(
             (result) => {
-                if (result.status === 200 && isMounted) onClose(true);
+                if (result.status === 200) {
+                    onClose(true);
+                }
                 setIsLoading(false);
             }
         ).catch(() => setIsLoading(false));
@@ -35,7 +35,10 @@ const BookPreview: React.FC<BookPreviewProps> = ({ book, onClose, onEdit }) => {
         if (isUpdating) return;
         setIsUpdating(true);
         Api.delete(`http://localhost:8080/inventory/${encodeURIComponent(book.isbn)}/${encodeURIComponent(item.id)}`).then(
-            () => loadData().then(() => setIsUpdating(false)).catch(() => setIsUpdating(false))
+            () => {
+                setIsUpdating(false);
+                loadData();
+            }
         ).catch(() => setIsUpdating(false));
     }
 
@@ -43,7 +46,10 @@ const BookPreview: React.FC<BookPreviewProps> = ({ book, onClose, onEdit }) => {
         if (isLoading) return;
         setIsLoading(true);
         Api.post(`http://localhost:8080/inventory/${encodeURIComponent(book.isbn)}`).then(
-            () => loadData().then(() => setIsUpdating(false)).catch(() => setIsUpdating(false))
+            () => {
+                setIsUpdating(false);
+                loadData();
+            }
         ).catch(() => setIsUpdating(false));
     }
 
@@ -54,32 +60,35 @@ const BookPreview: React.FC<BookPreviewProps> = ({ book, onClose, onEdit }) => {
             ...item,
             checkedIn: !item.checkedIn
         }).then(
-            () => loadData().then(() => setIsUpdating(false)).catch(() => setIsUpdating(false))
+            () => {
+                setIsUpdating(false);
+                loadData();
+            }
         ).catch(() => setIsUpdating(false));
     }
 
     const getBook = () => Api.get(`http://localhost:8080/book/${encodeURIComponent(book.isbn)}`).then((result: APIResponse) => {
-        if (result.status === 200 && isMounted) setFullBook(result.data);
+        if (result.status === 200) setFullBook(result.data);
     });
 
     const getLogs = () => Api.get(`http://localhost:8080/log/${encodeURIComponent(book.isbn)}`).then((result: APIResponse) => {
-        if (result.status === 200 && isMounted) setLogs(result.data);
+        if (result.status === 200) setLogs(result.data);
     });
 
 
     const getInventory = () => Api.get(`http://localhost:8080/inventory/${encodeURIComponent(book.isbn)}`).then((result: APIResponse) => {
-        if (result.status === 200 && isMounted) setInventory(result.data);
+        if (result.status === 200) setInventory(result.data);
     });
 
 
-    const loadData = () => Promise.all([getLogs(), getInventory(), getBook()]);
+    const loadData = () => {
+        setIsLoading(true)
+        return Promise.all([getLogs(), getInventory(), getBook()])
+            .then(() => setIsLoading(false))
+            .catch(() => setIsLoading(false));
+    }
     React.useEffect(() => {
-        isMounted = true;
-        setIsLoading(true);
-        loadData().then(() => setIsLoading(false)).catch(() => setIsLoading(false));
-        return () => {
-            isMounted = false;
-        }
+        loadData();
     }, []);
     return (
         <div className="modal">

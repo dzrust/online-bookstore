@@ -24,10 +24,10 @@ export const readBook = async (isbn: string): Promise<Book> => {
             });
     });
     return {
-        isbn: bookResult.isbn,
-        title: bookResult.title,
-        author: bookResult.author,
-        description: bookResult.bookDescription
+        isbn: bookResult[0].isbn,
+        title: bookResult[0].title,
+        author: bookResult[0].author,
+        description: bookResult[0].bookDescription
     };
 }
 
@@ -83,7 +83,6 @@ const validateBook = (book: Book): { valid: boolean, message: string } => {
 export const setupBookRoutes = (app: express.Application) => {
     app.post("/book", (req: express.Request, res: express.Response) => {
         const book: Book = req.body;
-        console.log(book);
         const validation = validateBook(book);
         if (!validation.valid) {
             res.send(createResponse(validation.message, 400));

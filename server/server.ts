@@ -5,6 +5,7 @@ import * as bodyParser from "body-parser";
 import { setupBookRoutes } from "./book";
 import { setupInventoryRoutes } from "./inventory";
 import { setupLogRoutes } from "./log";
+import { setupReportRoutes } from "./report";
 const app = express();
 const PORT = 8080;
 
@@ -23,6 +24,7 @@ app.get("/scripts/index.js",
 setupBookRoutes(app);
 setupInventoryRoutes(app);
 setupLogRoutes(app);
+setupReportRoutes(app);
 
 app.listen(PORT, () => {
     console.log(`⚡️[server]: Server is running at http://localhost:${PORT}`);

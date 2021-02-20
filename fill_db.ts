@@ -26,7 +26,7 @@ let max = 0;
     while (count < 1000 || count >= max) {
         const apiResult = await fetch(`https://www.googleapis.com/books/v1/volumes?q=scifi&printType=books&startIndex=${count}&maxResults=40`, {
             method: "GET",
-            headers: { 'content-type': 'application/json' }
+            headers: { "content-type": "application/json" }
         });
         const jsonResult: GoogleApiResponse = await apiResult.json();
         max = jsonResult.totalItems;
