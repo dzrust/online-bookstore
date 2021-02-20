@@ -9,7 +9,7 @@ const PORT = 8080;
 
 mappings.mappings.forEach((mapping: any) => {
     // this will look at server_mappings.json and bind each route to a .html page
-    app.get(mapping.path, (req: express.Request, res: express.Response) => res.sendFile(path.join(__dirname, "pages", `${mapping.file}`)));
+    app.get(mapping.path, (req: express.Request, res: express.Response) => res.sendFile(path.join(__dirname, "../pages", `${mapping.file}`)));
 });
 
 app.use(express.json());

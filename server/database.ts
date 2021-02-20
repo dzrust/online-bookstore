@@ -1,6 +1,6 @@
 import * as mysql from "mysql";
 
-export const queryCallback = (error: mysql.MysqlError | null, results: any, resolve:  (results:any) => void, reject: () => void) => {
+export const queryCallback = (error: mysql.MysqlError | null, results: any, resolve: (results: any) => void, reject: () => void) => {
     if (!error) resolve(results);
     reject();
 }
@@ -8,21 +8,34 @@ export const queryCallback = (error: mysql.MysqlError | null, results: any, reso
 class Database {
     private dbConnection: mysql.Connection;
 
-    public openDatabse = () => {
-        this.dbConnection = mysql.createConnection({
-            host: "bookstore.c1r50rjcihgr.us-west-2.rds.amazonaws.com",
-            user: "admin",
-            password: "aUP50yshetLhSBcjXCvW",
-            database: "bookstore"
-        });
-        //this.dbConnection.connect();
+    public openDatabase = () => {
+        try {
+            this.dbConnection = mysql.createConnection({
+                host: "online-bookstore_database_1.online-bookstore_default",
+                user: "root",
+                password: "password",
+                database: "bookstore"
+            });
+            this.dbConnection.connect((err) => {
+                if (err) {
+                    console.log("Failed to connect to DB");
+                    setTimeout(this.openDatabase, 5000);
+                    return;
+                }
+
+                console.log('connected as id ' + this.dbConnection.threadId);
+            });
+        } catch (err) {
+            console.log("Failed to connect to DB");
+            setTimeout(this.openDatabase, 5000);
+        }
     }
 
-    public getConnection () {
+    public getConnection() {
         return this.dbConnection;
     }
 }
 
 const database = new Database();
-database.openDatabse();
+database.openDatabase();
 export default database;
