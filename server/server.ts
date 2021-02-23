@@ -7,7 +7,7 @@ import { setupInventoryRoutes } from "./inventory";
 import { setupLogRoutes } from "./log";
 import { setupReportRoutes } from "./report";
 const app = express();
-const PORT = 3000;
+const PORT = 8080;
 
 mappings.mappings.forEach((mapping: any) => {
     // this will look at server_mappings.json and bind each route to a .html page
