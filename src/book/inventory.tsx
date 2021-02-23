@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Accordion, AccordionSummary, Typography, AccordionDetails, TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody, Button, Grid } from "@material-ui/core";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import * as Icons from "@material-ui/icons";
 import { Book, BookInventory } from "../../models/book";
 import Api from "../api";
 import Confirmation from "../components/confirmation";
@@ -66,7 +66,7 @@ const Inventory: React.FC<InventoryProps> = ({ inventory, book, isLoading, setEr
             <Grid item>
                 <Accordion>
                     <AccordionSummary
-                        expandIcon={() => <Typography >+</Typography>}
+                        expandIcon={<Icons.ExpandMore />}
                         aria-controls="panel1a-content"
                         id="panel1a-header"
                     >

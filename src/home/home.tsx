@@ -1,4 +1,4 @@
-import { Container, Button, Grid } from "@material-ui/core";
+import { Container, Button, Grid, Typography } from "@material-ui/core";
 import * as React from "react";
 import { Book } from "../../models/book";
 import BookForm from "../book/form";
@@ -36,10 +36,12 @@ const Home: React.FC = () => {
         }
     }
     return (
-        <Container maxWidth="sm">
-            <Grid container alignItems="center" justify="center" direction="column">
+        <Container maxWidth="md">
+            <Grid container spacing={2} direction="column">
                 <Grid item>
-                    <h1>Book Sm4rt!</h1>
+                    <Typography variant="h2">
+                        Book Sm4rt!
+                    </Typography>
                 </Grid>
                 <Grid item>
                     <Button variant="contained" color="primary" onClick={() => setModalOpen(VIEWS.FORM)} style={{ marginRight: "10px" }}>

@@ -1,7 +1,8 @@
 import * as React from "react";
 import { Accordion, AccordionDetails, AccordionSummary, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@material-ui/core";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import * as Icons from "@material-ui/icons";
 import { BookLog } from "../../models/book";
+import * as Moment from "moment";
 
 type LogPreviewProps = {
     logs: BookLog[];
@@ -12,7 +13,7 @@ const LogPreview: React.FC<LogPreviewProps> = ({ logs, isLoading }) => {
     return (
         <Accordion>
             <AccordionSummary
-                expandIcon={() => <Typography >+</Typography>}
+                expandIcon={<Icons.ExpandMore />}
                 aria-controls="panel1a-content"
                 id="panel1a-header"
             >
@@ -34,7 +35,7 @@ const LogPreview: React.FC<LogPreviewProps> = ({ logs, isLoading }) => {
                                 {logs.map((log: BookLog) =>
                                     <TableRow key={log.id}>
                                         <TableCell component="th" scope="row">
-                                            {log.dateTime}
+                                            {Moment(log.dateTime).format("LLL")}
                                         </TableCell>
                                         <TableCell align="right">{log.message}</TableCell>
                                     </TableRow>

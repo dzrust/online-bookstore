@@ -35,7 +35,7 @@ const BookForm: React.FC<BookFormProps> = ({ book, onClose, setError }) => {
                 {book ? "Edit Book" : "Add Book"}
             </DialogTitle>
             <DialogContent>
-                <Grid>
+                <Grid container spacing={2} direction="column">
                     <Grid item>
                         <TextField
                             label="ISBN"
@@ -75,11 +75,11 @@ const BookForm: React.FC<BookFormProps> = ({ book, onClose, setError }) => {
                 </Grid>
             </DialogContent>
             <DialogActions>
-                <Button variant="contained" color="primary" onClick={submitBookForm}>
-                    Submit
-                </Button>
                 <Button variant="contained" color="secondary" onClick={() => onClose()}>
                     Close
+                </Button>
+                <Button variant="contained" color="primary" onClick={submitBookForm}>
+                    Submit
                 </Button>
             </DialogActions>
         </Dialog>

@@ -28,10 +28,10 @@ const BookPreview: React.FC<BookPreviewProps> = ({ book, onClose, onEdit, setSel
         setIsLoading(true);
         Api.delete(`/book/${encodeURIComponent(book.isbn)}`).then(
             (result) => {
+                setIsLoading(false);
                 if (result.status === 200) {
                     onClose(true);
                 }
-                setIsLoading(false);
             }
         ).catch(() => { setError("Failed to delete book"); setIsLoading(false) });
     }
@@ -66,7 +66,7 @@ const BookPreview: React.FC<BookPreviewProps> = ({ book, onClose, onEdit, setSel
             {book.title}
         </DialogTitle>
         <DialogContent>
-            <Grid>
+            <Grid container spacing={2} direction="column">
                 <Grid item>
                     <Typography>ISBN: {book.isbn}</Typography>
                 </Grid>

@@ -62,7 +62,8 @@ CREATE PROCEDURE read_book_log(IN isbn VARCHAR(20))
 			bl.id, bl.updatedDateTime, bl.messageLog
 		FROM
 			BookLog bl
-		WHERE bl.isbn = isbn;
+		WHERE bl.isbn = isbn
+		ORDER BY bl.updatedDateTime DESC;
 	END//
 
 CREATE PROCEDURE create_book_inventory(IN isbn VARCHAR(20))
