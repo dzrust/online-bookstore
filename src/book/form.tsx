@@ -1,3 +1,4 @@
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, TextField } from "@material-ui/core";
 import * as React from "react";
 import { Book } from "../../models/book";
 import Api from "../api";
@@ -10,10 +11,10 @@ type BookFormProps = {
 
 const BookForm: React.FC<BookFormProps> = ({ book, onClose, setError }) => {
     const [formBook, setFormBook] = React.useState(book ?? { isbn: "", title: "", author: "", description: "" });
-    const updateBookISBN = (isbn: string) => setFormBook({ ...formBook, isbn });
-    const updateBookTitle = (title: string) => setFormBook({ ...formBook, title });
-    const updateBookAuthor = (author: string) => setFormBook({ ...formBook, author });
-    const updateBookDescription = (description: string) => setFormBook({ ...formBook, description });
+    const updateBookISBN = (e: React.ChangeEvent<HTMLInputElement>) => setFormBook({ ...formBook, isbn: e.target.value });
+    const updateBookTitle = (e: React.ChangeEvent<HTMLInputElement>) => setFormBook({ ...formBook, title: e.target.value });
+    const updateBookAuthor = (e: React.ChangeEvent<HTMLInputElement>) => setFormBook({ ...formBook, author: e.target.value });
+    const updateBookDescription = (e: React.ChangeEvent<HTMLInputElement>) => setFormBook({ ...formBook, description: e.target.value });
 
     const submitBookForm = async () => {
         setError(null);
@@ -29,34 +30,59 @@ const BookForm: React.FC<BookFormProps> = ({ book, onClose, setError }) => {
         }
     }
     return (
-        <div className="modal">
-            <h1>Book Form</h1>
-            <div>
-                <label>Book ISBN:</label>
-                <input type="text" value={formBook.isbn} onChange={(e) => updateBookISBN(e.target.value)} maxLength={20} />
-            </div>
-            <div>
-                <label>Book Title:</label>
-                <input type="text" value={formBook.title} onChange={(e) => updateBookTitle(e.target.value)} maxLength={200} />
-            </div>
-            <div>
-                <label>Book Author:</label>
-                <input type="text" value={formBook.author} onChange={(e) => updateBookAuthor(e.target.value)} maxLength={200} />
-            </div>
-            <div>
-                <label>Book Description:</label>
-                <input type="text" value={formBook.description} onChange={(e) => updateBookDescription(e.target.value)} />
-            </div>
-            <div>
-                <button onClick={submitBookForm}>
+        <Dialog open={true} onClose={(() => onClose())} aria-labelledby="form-dialog-title">
+            <DialogTitle id="form-dialog-title">
+                {book ? "Edit Book" : "Add Book"}
+            </DialogTitle>
+            <DialogContent>
+                <Grid>
+                    <Grid item>
+                        <TextField
+                            label="ISBN"
+                            variant="outlined"
+                            type="text"
+                            value={formBook.isbn}
+                            onChange={updateBookISBN}
+                        />
+                    </Grid>
+                    <Grid item>
+                        <TextField
+                            label="Title"
+                            variant="outlined"
+                            type="text"
+                            value={formBook.title}
+                            onChange={updateBookTitle}
+                        />
+                    </Grid>
+                    <Grid item>
+                        <TextField
+                            label="Author"
+                            variant="outlined"
+                            type="text"
+                            value={formBook.author}
+                            onChange={updateBookAuthor}
+                        />
+                    </Grid>
+                    <Grid item>
+                        <TextField
+                            label="Description"
+                            variant="outlined"
+                            type="text"
+                            value={formBook.description}
+                            onChange={updateBookDescription}
+                        />
+                    </Grid>
+                </Grid>
+            </DialogContent>
+            <DialogActions>
+                <Button variant="contained" color="primary" onClick={submitBookForm}>
                     Submit
-                </button>
-                <button onClick={() => onClose()}>
+                </Button>
+                <Button variant="contained" color="secondary" onClick={() => onClose()}>
                     Close
-                </button>
-            </div>
-
-        </div>
+                </Button>
+            </DialogActions>
+        </Dialog>
     )
 }
 

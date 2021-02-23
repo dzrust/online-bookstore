@@ -1,10 +1,10 @@
+import { Container, Button, Grid } from "@material-ui/core";
 import * as React from "react";
 import { Book } from "../../models/book";
 import BookForm from "../book/form";
 import BookList from "../book/list";
 import BookPreview from "../book/preview";
 import ErrorDisplay from "../components/error";
-import "../styles.css";
 
 enum VIEWS {
     LIST,
@@ -36,26 +36,30 @@ const Home: React.FC = () => {
         }
     }
     return (
-        <div className="home">
-            <div className="home-container">
-                <div className="home-header">
+        <Container maxWidth="sm">
+            <Grid container alignItems="center" justify="center" direction="column">
+                <Grid item>
                     <h1>Book Sm4rt!</h1>
-                    <div className="home-header-btns">
-                        <button onClick={() => setModalOpen(VIEWS.FORM)}>Add Book</button>
-                        <a href="/report" target="_blank">Inventory Report</a>
-                    </div>
-                </div>
-                <div className="home-content">
+                </Grid>
+                <Grid item>
+                    <Button variant="contained" color="primary" onClick={() => setModalOpen(VIEWS.FORM)} style={{ marginRight: "10px" }}>
+                        Add Book
+                    </Button>
+                    <Button variant="contained" color="primary" href="/report" target="_blank">
+                        Inventory Report
+                    </Button>
+                </Grid>
+                <Grid item>
                     <BookList onBookSelected={selectBook} reloadObject={reloadObject} setError={setError} />
-                </div>
-            </div>
+                </Grid>
+            </Grid>
             {
                 renderModal()
             }
             {
-                error && <ErrorDisplay message={error}/>
+                error && <ErrorDisplay message={error} onClose={() => setError(null)} />
             }
-        </div>
+        </Container>
     )
 }
 

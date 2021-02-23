@@ -1,3 +1,4 @@
+import { Dialog, DialogTitle, DialogContent, Grid, DialogActions, Button, Typography } from "@material-ui/core";
 import * as React from "react";
 import { Book, BookInventory, BookLog } from "../../models/book";
 import { APIResponse } from "../../models/response";
@@ -60,31 +61,38 @@ const BookPreview: React.FC<BookPreviewProps> = ({ book, onClose, onEdit, setSel
         loadData();
     }, []);
 
-    return (
-        <div className="modal">
-            <div className="preview">
-                <div className="preview-header">
-                    Title: <div className="bold">{book.title}</div>
-                </div>
-                <div className="preview-body">
-                    <div>ISBN: {book.isbn}</div>
-                    <div>Author: {book.author}</div>
-                    <div>Description: {book.description}</div>
+    return (<Dialog open onClose={(() => onClose())} aria-labelledby="form-dialog-title">
+        <DialogTitle id="form-dialog-title">
+            {book.title}
+        </DialogTitle>
+        <DialogContent>
+            <Grid>
+                <Grid item>
+                    <Typography>ISBN: {book.isbn}</Typography>
+                </Grid>
+                <Grid item>
+                    <Typography>Author(s): {book.author}</Typography>
+                </Grid>
+                <Grid item>
+                    <Typography>Description(s): {book.description}</Typography>
+
+                </Grid>
+                <Grid item>
                     <Inventory inventory={inventory} book={book} isLoading={isLoading} setError={setError} loadData={loadData} />
+
+                </Grid>
+                <Grid item >
                     <LogPreview logs={logs} isLoading={isLoading} />
-
-                </div>
-
-                <div className="preview-footer">
-                    <button onClick={onEdit}>Edit</button>
-                    <button onClick={() => setIsConfirmingDeleteBook(true)} disabled={isLoading}>Delete</button>
-                    <button onClick={() => onClose(false)}>Close</button>
-                </div>
-            </div>
-            {
-                isConfirmingDeleteBook && <Confirmation onNo={() => setIsConfirmingDeleteBook(false)} onYes={deleteBook} />
-            }
-        </div>
+                </Grid>
+            </Grid>
+        </DialogContent>
+        <DialogActions>
+            <Button variant="contained" color="primary" onClick={onEdit}>Edit</Button>
+            <Button variant="contained" color="secondary" onClick={() => setIsConfirmingDeleteBook(true)} disabled={isLoading}>Delete</Button>
+            <Button variant="contained" color="secondary" onClick={() => onClose(false)}>Close</Button>
+        </DialogActions>
+        <Confirmation isOpen={isConfirmingDeleteBook} onNo={() => setIsConfirmingDeleteBook(false)} onYes={deleteBook} />
+    </Dialog>
     )
 }
 

@@ -1,7 +1,7 @@
 const path = require("path");
 
 module.exports = {
-  mode: "production",
+  mode: "development",
   entry: "./src/bootstrapper.tsx",
   module: {
     rules: [
@@ -9,10 +9,6 @@ module.exports = {
         test: /\.tsx?$/,
         use: "ts-loader",
         exclude: /node_modules/
-      },
-      {
-        test: /\.css$/i,
-        use: ["style-loader", "css-loader"],
       },
     ],
   },

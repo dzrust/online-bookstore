@@ -1,4 +1,6 @@
 import * as React from "react";
+import { Accordion, AccordionDetails, AccordionSummary, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@material-ui/core";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { BookLog } from "../../models/book";
 
 type LogPreviewProps = {
@@ -7,29 +9,43 @@ type LogPreviewProps = {
 }
 
 const LogPreview: React.FC<LogPreviewProps> = ({ logs, isLoading }) => {
-    const [isLogsOpen, setIsLogsOpen] = React.useState(false);
     return (
-        <div>
-            <div className="pointer" onClick={() => setIsLogsOpen(!isLogsOpen)}>
-                Logs {isLogsOpen ? "-" : "O"}
-            </div>
-            {
-                isLogsOpen && !isLoading ? (
-                    <div className="table">
-                        {
-                            logs.map((log: BookLog) => {
-                                return (
-                                    <div key={log.id} className="row">
-                                        <div className="column bold">{log.dateTime}</div>
-                                        <div className="column">{log.message}</div>
-                                    </div>
-                                )
-                            })
-                        }
-                    </div>
-                ) : null
-            }
-        </div>
+        <Accordion>
+            <AccordionSummary
+                expandIcon={() => <Typography >+</Typography>}
+                aria-controls="panel1a-content"
+                id="panel1a-header"
+            >
+                <Typography>Logs</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+                {
+                    isLoading ? (
+                        <Typography>Loading Logs</Typography>
+                    ) : (<TableContainer component={Paper}>
+                        <Table aria-label="simple table">
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell>Date</TableCell>
+                                    <TableCell align="right">Message</TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {logs.map((log: BookLog) =>
+                                    <TableRow key={log.id}>
+                                        <TableCell component="th" scope="row">
+                                            {log.dateTime}
+                                        </TableCell>
+                                        <TableCell align="right">{log.message}</TableCell>
+                                    </TableRow>
+                                )}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                        )
+                }
+            </AccordionDetails >
+        </Accordion >
     )
 }
 

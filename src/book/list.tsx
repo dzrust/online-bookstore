@@ -1,3 +1,4 @@
+import { Button, Grid, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from "@material-ui/core";
 import * as React from "react";
 import { Book } from "../../models/book";
 import Api from "../api";
@@ -37,26 +38,49 @@ const BookList: React.FC<BookListProps> = ({ reloadObject, onBookSelected, setEr
         getBooks(searchText);
     }, [reloadObject]);
     return (
-        <div>
-            Search for book either by isbn, title, or author
-            <div>
-                <input type="text" value={searchText} onChange={(e) => updateSearchText(e.target.value)} />
-            </div>
-            <div className="table">
-                {
-                    books.map((book: Book) => {
-                        return (
-                            <div key={book.isbn} className="row">
-                                <div className="column">{book.isbn}</div>
-                                <div className="column bold">{book.title}</div>
-                                <div className="column">{book.author}</div>
-                                <button className="column" onClick={() => onBookSelected(book)}>View</button>
-                            </div>
-                        )
-                    })
-                }
-            </div>
-        </div>
+        <Grid>
+            <Grid item>
+                Search for book either by isbn, title, or author
+            </Grid>
+            <Grid item>
+                <TextField
+                    label="Search"
+                    variant="outlined"
+                    type="text"
+                    value={searchText}
+                    onChange={(e) => updateSearchText(e.target.value)} />
+            </Grid>
+            <Grid item>
+                <TableContainer component={Paper}>
+                    <Table aria-label="simple table">
+                        <TableHead>
+                            <TableRow>
+                                <TableCell>ISBN</TableCell>
+                                <TableCell align="right">Title</TableCell>
+                                <TableCell align="right">Author</TableCell>
+                                <TableCell align="right">Preview</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {books.map((book: Book) => (
+                                <TableRow key={book.isbn}>
+                                    <TableCell component="th" scope="row">
+                                        {book.isbn}
+                                    </TableCell>
+                                    <TableCell align="right">{book.title}</TableCell>
+                                    <TableCell align="right">{book.author}</TableCell>
+                                    <TableCell align="right">
+                                        <Button variant="contained" color="primary" onClick={() => onBookSelected(book)}>
+                                            View
+                                        </Button>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            </Grid>
+        </Grid>
     )
 }
 
