@@ -25,7 +25,7 @@ const BookPreview: React.FC<BookPreviewProps> = ({ book, onClose, onEdit, setSel
         if (isLoading) return;
         setError(null);
         setIsLoading(true);
-        Api.delete(`http://localhost:8080/book/${encodeURIComponent(book.isbn)}`).then(
+        Api.delete(`/book/${encodeURIComponent(book.isbn)}`).then(
             (result) => {
                 if (result.status === 200) {
                     onClose(true);
@@ -35,16 +35,16 @@ const BookPreview: React.FC<BookPreviewProps> = ({ book, onClose, onEdit, setSel
         ).catch(() => { setError("Failed to delete book"); setIsLoading(false) });
     }
 
-    const getBook = () => Api.get(`http://localhost:8080/book/${encodeURIComponent(book.isbn)}`).then((result: APIResponse) => {
+    const getBook = () => Api.get(`/book/${encodeURIComponent(book.isbn)}`).then((result: APIResponse) => {
         if (result.status === 200) setSelectedBook(result.data);
     });
 
-    const getLogs = () => Api.get(`http://localhost:8080/log/${encodeURIComponent(book.isbn)}`).then((result: APIResponse) => {
+    const getLogs = () => Api.get(`/log/${encodeURIComponent(book.isbn)}`).then((result: APIResponse) => {
         if (result.status === 200) setLogs(result.data);
     });
 
 
-    const getInventory = () => Api.get(`http://localhost:8080/inventory/${encodeURIComponent(book.isbn)}`).then((result: APIResponse) => {
+    const getInventory = () => Api.get(`/inventory/${encodeURIComponent(book.isbn)}`).then((result: APIResponse) => {
         if (result.status === 200) setInventory(result.data);
     });
 

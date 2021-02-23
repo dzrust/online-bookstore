@@ -25,7 +25,7 @@ const BookList: React.FC<BookListProps> = ({ reloadObject, onBookSelected, setEr
             return;
         }
         setError(null);
-        const results = await Api.get("http://localhost:8080/book?searchText=" + encodeURIComponent(searchText));
+        const results = await Api.get("/book?searchText=" + encodeURIComponent(searchText));
         if (results.status !== 200) {
             setError("Search failed");
         } else {

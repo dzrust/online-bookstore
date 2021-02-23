@@ -20,7 +20,7 @@ const Inventory: React.FC<InventoryProps> = ({ inventory, book, isLoading, setEr
         if (isUpdating) return;
         setError(null);
         setIsUpdating(true);
-        Api.delete(`http://localhost:8080/inventory/${encodeURIComponent(book.isbn)}/${encodeURIComponent(item.id)}`).then(
+        Api.delete(`/inventory/${encodeURIComponent(book.isbn)}/${encodeURIComponent(item.id)}`).then(
             () => {
                 setIsUpdating(false);
                 loadData();
@@ -32,7 +32,7 @@ const Inventory: React.FC<InventoryProps> = ({ inventory, book, isLoading, setEr
         if (isLoading) return;
         setError(null);
         setIsUpdating(true)
-        Api.post(`http://localhost:8080/inventory/${encodeURIComponent(book.isbn)}`).then(
+        Api.post(`/inventory/${encodeURIComponent(book.isbn)}`).then(
             () => {
                 setIsUpdating(false);
                 loadData();
@@ -44,7 +44,7 @@ const Inventory: React.FC<InventoryProps> = ({ inventory, book, isLoading, setEr
         if (isUpdating) return;
         setError(null);
         setIsUpdating(true);
-        Api.put(`http://localhost:8080/inventory/${encodeURIComponent(book.isbn)}/${encodeURIComponent(item.id)}`, {
+        Api.put(`/inventory/${encodeURIComponent(book.isbn)}/${encodeURIComponent(item.id)}`, {
             ...item,
             checkedIn: !item.checkedIn
         }).then(

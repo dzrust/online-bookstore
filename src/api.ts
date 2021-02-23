@@ -7,19 +7,24 @@ class API {
             mode: "cors",
         }
     };
+
+    private get baseUrl(): string {
+        return window.location.origin;
+    };
+
     post = async (url: string, body?: any, requestInit?: RequestInit): Promise<APIResponse> => {
         let init = requestInit ?? this.defaultBlock;
         if (body) {
             init.body = JSON.stringify(body);
         }
         init.method = "POST";
-        const response = await fetch(url, init);
+        const response = await fetch(`${this.baseUrl}${url}`, init);
         return await response.json();
     }
     get = async (url: string, requestInit?: RequestInit): Promise<APIResponse> => {
         let init = requestInit ?? this.defaultBlock;
         init.method = "GET";
-        const response = await fetch(url, init);
+        const response = await fetch(`${this.baseUrl}${url}`, init);
         return await response.json();
     }
     put = async (url: string, body?: any, requestInit?: RequestInit): Promise<APIResponse> => {
@@ -28,7 +33,7 @@ class API {
             init.body = JSON.stringify(body);
         }
         init.method = "PUT";
-        const response = await fetch(url, init);
+        const response = await fetch(`${this.baseUrl}${url}`, init);
         return await response.json();
     }
     delete = async (url: string, body?: any, requestInit?: RequestInit): Promise<APIResponse> => {
@@ -37,7 +42,7 @@ class API {
             init.body = JSON.stringify(body);
         }
         init.method = "DELETE";
-        const response = await fetch(url, init);
+        const response = await fetch(`${this.baseUrl}${url}`, init);
         return await response.json();
     }
 

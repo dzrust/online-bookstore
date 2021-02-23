@@ -11,6 +11,7 @@ This project uses:
 Run:
 - `npm i`
 - `npm run-script build-docker`
+- look at the container name of the database and set `DB_HOSTNAME` within `docker-compose.yml` 
 - `npm run-script start-docker`
 - Once the two aforementioned commands are done run this to fill db: `npm run-script fill-db`
 
