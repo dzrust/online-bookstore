@@ -38,14 +38,28 @@ CREATE PROCEDURE delete_book(IN isbn VARCHAR(20))
 	   DELETE FROM BookLog bl WHERE bl.isbn = isbn;
 	END//
 
-CREATE PROCEDURE read_all_books(searchText VARCHAR(200))
+CREATE PROCEDURE read_all_books_count(searchText VARCHAR(200))
+	## read_all_books must match this call
+	BEGIN
+		SELECT 
+			COUNT(b.isbn) AS resultCount
+		FROM
+			Book b
+        WHERE
+            b.isbn LIKE searchText OR b.title LIKE searchText OR b.author LIKE searchText OR searchText IS NULL;
+	END//
+
+CREATE PROCEDURE read_all_books(IN searchText VARCHAR(200), IN pageStart INT, IN pageEnd INT)
+	## read_all_books_count must match this call
 	BEGIN
 		SELECT 
 			b.isbn, b.title, b.author
 		FROM
 			Book b
         WHERE
-            b.isbn LIKE searchText OR b.title LIKE searchText OR b.author LIKE searchText OR searchText IS NULL;
+            b.isbn LIKE searchText OR b.title LIKE searchText OR b.author LIKE searchText OR searchText IS NULL
+		ORDER BY b.title
+        LIMIT pageStart, pageEnd;
 	END//
 
 CREATE PROCEDURE create_book_log(IN isbn VARCHAR(20), IN messageLog TEXT)

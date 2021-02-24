@@ -1,4 +1,4 @@
-import { Button, Grid, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from "@material-ui/core";
+import { Button, Grid, Paper, Table, TableBody, TableCell, TableContainer, TableFooter, TableHead, TablePagination, TableRow, TextField, Typography } from "@material-ui/core";
 import * as React from "react";
 import { Book } from "../../models/book";
 import Api from "../api";
@@ -14,28 +14,44 @@ let timeout: any | null = null;
 const BookList: React.FC<BookListProps> = ({ reloadObject, onBookSelected, setError }) => {
     const [searchText, setSearchText] = React.useState("");
     const [books, setBooks] = React.useState<Book[]>([]);
+    const [bookCount, setBookCount] = React.useState<number>(0);
+    const [page, setPage] = React.useState<number>(0);
+    const [isLoading, setIsLoading] = React.useState(false);
     const updateSearchText = (searchText: string) => {
+        setPage(0);
+        setIsLoading(true);
         setSearchText(searchText);
         if (timeout) clearTimeout(timeout);
-        timeout = setTimeout(() => getBooks(searchText), 500);
+        timeout = setTimeout(() => getBooks(searchText, 0), 500);
     }
 
-    const getBooks = async (searchText: string) => {
+    const getBooks = async (searchText: string, pageNumber: number) => {
         if (searchText === "") {
             setBooks([]);
             return;
         }
         setError(null);
-        const results = await Api.get("/book?searchText=" + encodeURIComponent(searchText));
-        if (results.status !== 200) {
-            setError("Search failed");
-        } else {
-            setBooks(results.data);
+        try {
+            const results = await Api.get(`/book?page=${pageNumber}&searchText=${encodeURIComponent(searchText)}`);
+            if (results.status !== 200) {
+                setError("Search failed");
+            } else {
+                setBooks(results.data.books);
+                setBookCount(results.data.bookCount);
+            }
+        } catch (err) {
+            setError("Failed to get books try again");
         }
+        setIsLoading(false);
+    }
+
+    const changePage = (_: any, page: number) => {
+        setPage(page);
+        getBooks(searchText, page);
     }
 
     React.useEffect(() => {
-        getBooks(searchText);
+        getBooks(searchText, page);
     }, [reloadObject]);
     return (
         <Grid container spacing={2} direction="column">
@@ -53,6 +69,19 @@ const BookList: React.FC<BookListProps> = ({ reloadObject, onBookSelected, setEr
                     onChange={(e) => updateSearchText(e.target.value)}
                     fullWidth
                 />
+            </Grid>
+            <Grid item>
+                {
+                    isLoading ? (
+                        <Typography>
+                            Loading...
+                        </Typography>
+                    ) : (
+                            <Typography>
+                                Total Books Found: {bookCount}
+                            </Typography>
+                        )
+                }
             </Grid>
             <Grid item>
                 <TableContainer component={Paper}>
@@ -81,10 +110,26 @@ const BookList: React.FC<BookListProps> = ({ reloadObject, onBookSelected, setEr
                                 </TableRow>
                             ))}
                         </TableBody>
+                        <TableFooter>
+                            <TableRow>
+                                <TablePagination
+                                    rowsPerPageOptions={[100]}
+                                    colSpan={3}
+                                    count={bookCount}
+                                    rowsPerPage={100}
+                                    page={page}
+                                    SelectProps={{
+                                        inputProps: { 'aria-label': 'rows per page' },
+                                        native: true,
+                                    }}
+                                    onChangePage={changePage}
+                                />
+                            </TableRow>
+                        </TableFooter>
                     </Table>
                 </TableContainer>
             </Grid>
-        </Grid>
+        </Grid >
     )
 }
 

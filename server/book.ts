@@ -3,6 +3,7 @@ import { Book } from "../models/book"
 import database, { queryCallback } from "./database"
 import { createResponse } from "./response";
 
+const PAGE_SIZE = 100;
 
 export const createBook = async (book: Book) => {
     await new Promise((resolve, reject) => {
@@ -52,10 +53,22 @@ export const deleteBook = async (isbn: string) => {
     });
 }
 
-export const readAllBooks = async (searchText: string): Promise<Book[]> => {
+export const readAllBooksCount = async (searchText: string): Promise<number> => {
     const booksResult: any[] = await new Promise((resolve, reject) => {
         database.getConnection().query(
-            "CALL read_all_books(?);", [`%${searchText}%`], (error, results) => {
+            "CALL read_all_books_count(?);", [`%${searchText}%`], (error, results) => {
+                queryCallback(error, results, resolve, reject);
+            });
+    });
+    return booksResult[0].resultCount;
+}
+
+export const readAllBooks = async (searchText: string, page: number, bookCount: number): Promise<Book[]> => {
+    let pageStart = (page * PAGE_SIZE);
+    let pageEnd = pageStart + PAGE_SIZE;
+    const booksResult: any[] = await new Promise((resolve, reject) => {
+        database.getConnection().query(
+            "CALL read_all_books(?, ?, ?);", [`%${searchText}%`, pageStart, pageEnd], (error, results) => {
                 queryCallback(error, results, resolve, reject);
             });
     });
@@ -96,11 +109,22 @@ export const setupBookRoutes = (app: express.Application) => {
     });
     app.get("/book", (req: express.Request, res: express.Response) => {
         const searchText = req.query.searchText as string;
+        const page = parseInt(req.query.page as string, 10);
         if (searchText && searchText.length > 200) {
             res.send(createResponse("Search text cannot be greater than 200 characters", 200));
         }
-        readAllBooks(searchText).then((books) => {
-            res.send(createResponse(books, 200));
+        if (page === NaN) {
+            res.send(createResponse("A valid numeric page is requried", 200));
+        }
+        readAllBooksCount(searchText).then((bookCount) => {
+            readAllBooks(searchText, page, bookCount).then((books) => {
+                res.send(createResponse({
+                    books,
+                    bookCount,
+                }, 200));
+            }).catch((err) => {
+                res.send(createResponse(err, 500));
+            });
         }).catch((err) => {
             res.send(createResponse(err, 500));
         });
