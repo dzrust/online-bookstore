@@ -9,24 +9,16 @@ export const queryCallback = (error: mysql.MysqlError | null, results: any, reso
 }
 
 class Database {
-    private dbConnection: mysql.Connection;
+    private dbConnectionPool: mysql.Pool;
 
     public openDatabase = () => {
         try {
-            this.dbConnection = mysql.createConnection({
+            this.dbConnectionPool = mysql.createPool({
+                connectionLimit: 50,
                 host: process.env.DB_HOSTNAME ?? "localhost",
                 user: "root",
                 password: "password",
                 database: "bookstore"
-            });
-            this.dbConnection.connect((err) => {
-                if (err) {
-                    console.log("Failed to connect to DB");
-                    setTimeout(this.openDatabase, 5000);
-                    return;
-                }
-
-                console.log("connected as id " + this.dbConnection.threadId);
             });
         } catch (err) {
             console.log("Failed to connect to DB");
@@ -34,8 +26,8 @@ class Database {
         }
     }
 
-    public getConnection() {
-        return this.dbConnection;
+    public getConnection()  {
+        return this.dbConnectionPool;
     }
 }
 
