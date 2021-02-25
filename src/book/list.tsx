@@ -114,7 +114,6 @@ const BookList: React.FC<BookListProps> = ({ reloadObject, onBookSelected, setEr
                             <TableRow>
                                 <TablePagination
                                     rowsPerPageOptions={[100]}
-                                    colSpan={3}
                                     count={bookCount}
                                     rowsPerPage={100}
                                     page={page}
