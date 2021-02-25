@@ -28,6 +28,9 @@ const BookList: React.FC<BookListProps> = ({ reloadObject, onBookSelected, setEr
     const getBooks = async (searchText: string, pageNumber: number) => {
         if (searchText === "") {
             setBooks([]);
+            setPage(0);
+            setBookCount(0);
+            setIsLoading(false);
             return;
         }
         setError(null);
