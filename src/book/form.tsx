@@ -30,7 +30,7 @@ const BookForm: React.FC<BookFormProps> = ({ book, onClose, setError }) => {
         }
     }
     return (
-        <Dialog open={true} onClose={(() => onClose())} aria-labelledby="form-dialog-title">
+        <Dialog open={true} onClose={(() => onClose())} aria-labelledby="form-dialog-title" fullWidth maxWidth="md">
             <DialogTitle id="form-dialog-title">
                 {book ? "Edit Book" : "Add Book"}
             </DialogTitle>
@@ -43,6 +43,7 @@ const BookForm: React.FC<BookFormProps> = ({ book, onClose, setError }) => {
                             type="text"
                             value={formBook.isbn}
                             onChange={updateBookISBN}
+                            fullWidth
                         />
                     </Grid>
                     <Grid item>
@@ -52,6 +53,7 @@ const BookForm: React.FC<BookFormProps> = ({ book, onClose, setError }) => {
                             type="text"
                             value={formBook.title}
                             onChange={updateBookTitle}
+                            fullWidth
                         />
                     </Grid>
                     <Grid item>
@@ -61,6 +63,7 @@ const BookForm: React.FC<BookFormProps> = ({ book, onClose, setError }) => {
                             type="text"
                             value={formBook.author}
                             onChange={updateBookAuthor}
+                            fullWidth
                         />
                     </Grid>
                     <Grid item>
@@ -70,6 +73,10 @@ const BookForm: React.FC<BookFormProps> = ({ book, onClose, setError }) => {
                             type="text"
                             value={formBook.description}
                             onChange={updateBookDescription}
+                            multiline
+                            fullWidth
+                            rows={4}
+                            rowsMax={10}
                         />
                     </Grid>
                 </Grid>

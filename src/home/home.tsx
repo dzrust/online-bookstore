@@ -1,4 +1,4 @@
-import { Container, Button, Grid, Typography } from "@material-ui/core";
+import { CssBaseline, Container, Button, Grid, Typography } from "@material-ui/core";
 import * as React from "react";
 import { Book } from "../../models/book";
 import BookForm from "../book/form";
@@ -36,32 +36,35 @@ const Home: React.FC = () => {
         }
     }
     return (
-        <Container maxWidth="md">
-            <Grid container spacing={2} direction="column">
-                <Grid item>
-                    <Typography variant="h2">
-                        Book Sm4rt!
+        <React.Fragment>
+        <CssBaseline />
+            <Container maxWidth="md">
+                <Grid container spacing={2} direction="column">
+                    <Grid item>
+                        <Typography variant="h2">
+                            Book Sm4rt!
                     </Typography>
-                </Grid>
-                <Grid item>
-                    <Button variant="contained" color="primary" onClick={() => setModalOpen(VIEWS.FORM)} style={{ marginRight: "10px" }}>
-                        Add Book
+                    </Grid>
+                    <Grid item>
+                        <Button variant="contained" color="primary" onClick={() => setModalOpen(VIEWS.FORM)} style={{ marginRight: "10px" }}>
+                            Add Book
                     </Button>
-                    <Button variant="contained" color="primary" href="/report" target="_blank">
-                        Inventory Report
+                        <Button variant="contained" color="primary" href="/report" target="_blank">
+                            Inventory Report
                     </Button>
+                    </Grid>
+                    <Grid item>
+                        <BookList onBookSelected={selectBook} reloadObject={reloadObject} setError={setError} />
+                    </Grid>
                 </Grid>
-                <Grid item>
-                    <BookList onBookSelected={selectBook} reloadObject={reloadObject} setError={setError} />
-                </Grid>
-            </Grid>
-            {
-                renderModal()
-            }
-            {
-                error && <ErrorDisplay message={error} onClose={() => setError(null)} />
-            }
-        </Container>
+                {
+                    renderModal()
+                }
+                {
+                    error && <ErrorDisplay message={error} onClose={() => setError(null)} />
+                }
+            </Container>
+        </React.Fragment>
     )
 }
 
